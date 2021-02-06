@@ -58,3 +58,8 @@ The most important aspect of this project is the ability to work in a team. No m
 ## GitHub
 
 see the [GITHUB Document](__documentation/GITHUB.md)
+
+alex and gia
+pull changes from vanes repo :
+`git fetch parent `
+`git merge parent/master`
