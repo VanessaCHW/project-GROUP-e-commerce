@@ -1,6 +1,6 @@
-const fs = require('file-system');
+const fs = require("file-system");
 
-const companies = JSON.parse(fs.readFileSync('server/data/companies.json'));
+const companies = JSON.parse(fs.readFileSync("server/data/companies.json"));
 // const items = JSON.parse(fs.readFileSync('server/data/items.json'));
 
 const updatedArr = [];
@@ -14,4 +14,4 @@ companies.forEach((item) => {
   });
 });
 
-fs.writeFileSync('server/data/fixedCompanies.json', JSON.stringify(updatedArr));
+fs.writeFileSync("server/data/fixedCompanies.json", JSON.stringify(updatedArr));
