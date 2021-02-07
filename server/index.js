@@ -3,11 +3,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const { getProducts, getSomeProducts } = require('./handlers');
 
 const PORT = 4000;
 
 express()
-  .use(function(req, res, next) {
+  .use(function (req, res, next) {
     res.header(
       'Access-Control-Allow-Methods',
       'OPTIONS, HEAD, GET, PUT, POST, DELETE'
@@ -26,5 +27,16 @@ express()
 
   // REST endpoints?
   .get('/bacon', (req, res) => res.status(200).json('🥓'))
+
+  .get('/api/products', getProducts) // Returns ALL item info
+  .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
+
+  // Catch all endpoint
+  .get('*', (req, res) =>
+    res.status(404).json({
+      status: 404,
+      message: 'There is a problem with your request!',
+    })
+  )
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
