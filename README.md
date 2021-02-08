@@ -59,7 +59,16 @@ The most important aspect of this project is the ability to work in a team. No m
 
 see the [GITHUB Document](__documentation/GITHUB.md)
 
-alex and gia
-pull changes from vanes repo :
-`git fetch parent `
-`git merge parent/master`
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Alex and Gia
+Pull changes from vanes repo :
+
+_Don't forget to commit first_
+
+good one `git pull upstream main`
+
+1-`git fetch parent ` pull upstream
+2-`git merge parent/master` main=master
+
+git remote -v

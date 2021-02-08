@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
 html,
@@ -9,7 +9,7 @@ span {
   padding: 0;
   border: 0;
   vertical-align: baseline;
-  color: white;
+  color: black;
 }
 /* GLOBAL STYLES */
 *,
@@ -20,4 +20,4 @@ span {
   
   font-family: Montserrat, sans-serif;
 }
-` 
+`;
