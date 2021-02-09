@@ -26,7 +26,7 @@ const Searched = () => {
   }
   return (
     <Wrapper>
-      <Typehead />
+      <Typehead suggestions={items} />
       <nav>NAVIGATION BAR</nav> {/*To replace with Nav component later*/}
       <MainContainer>
         <div className="___filterExample">FILTER BOX</div>{' '}
