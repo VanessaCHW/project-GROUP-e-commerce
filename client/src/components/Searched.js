@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
+import Typehead from './Typehead';
 
 const Searched = () => {
   const [items, setItems] = React.useState(null);
@@ -25,6 +26,7 @@ const Searched = () => {
   }
   return (
     <Wrapper>
+      <Typehead />
       <nav>NAVIGATION BAR</nav> {/*To replace with Nav component later*/}
       <MainContainer>
         <div className="___filterExample">FILTER BOX</div>{' '}
