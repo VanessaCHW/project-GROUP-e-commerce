@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import GlobalStyles from './Globalstyles';
+
 import Searched from './Searched';
 import SmallCart from './SmallCart';
 
