@@ -24,6 +24,9 @@ function App() {
             <Route exact path="/">
               <Searched />
             </Route>
+            <Route exact path="/product/:id">
+              <p>Item page</p>
+            </Route>
           </Switch>
         </Body>
         <SmallCart />

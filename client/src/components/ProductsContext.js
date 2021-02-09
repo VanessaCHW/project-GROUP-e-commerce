@@ -11,8 +11,8 @@ export const ProductsProvider = ({ children }) => {
     fetch('/api/products')
       .then((res) => res.json())
       .then((res) => {
-        console.log('Fetch in ProductsContext.js: ', res);
-        console.log(Object.values(res.data));
+        // console.log('Fetch in ProductsContext.js: ', res);
+        // console.log(Object.values(res.data));
         setProducts(Object.values(res.data));
       })
       .catch((error) => {

@@ -18,6 +18,7 @@ span {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   
-  font-family: Montserrat, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
+
 `;
