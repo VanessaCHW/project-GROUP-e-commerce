@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import GlobalStyles from './Globalstyles';
+
 import Searched from './Searched';
 import SmallCart from './SmallCart';
+import BigItem from './BigItem';
 
 function App() {
   const [bacon, setBacon] = useState(null);
@@ -25,7 +27,7 @@ function App() {
               <Searched />
             </Route>
             <Route exact path="/product/:id">
-              <p>Item page</p>
+              <BigItem />
             </Route>
           </Switch>
         </Body>

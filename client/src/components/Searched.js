@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { ProductsContext } from './ProductsContext';
+import SmallItem from './SmallItem';
+import Typehead from './Typehead';
 
 const Searched = () => {
   const [items, setItems] = React.useState(null);
@@ -23,20 +26,19 @@ const Searched = () => {
   }
   return (
     <Wrapper>
+      <Typehead suggestions={items} />
       <nav>NAVIGATION BAR</nav> {/*To replace with Nav component later*/}
       <MainContainer>
         <div className="___filterExample">FILTER BOX</div>{' '}
         {/*To replace with filter component later*/}
         <ItemsContainer>
           {items.map((item) => {
-            return <Item>{item.name}</Item>;
-          })}
-          {items.map((item) => {
-            return <Item>{item.name}</Item>;
+            // return <Item>{item.name}</Item>;
+            return <SmallItem item={item} />;
           })}
         </ItemsContainer>
-        <div className="___cart">CART BOX</div>{' '}
-        {/*To replace with Cart component later*/}
+        {/* <div className="___cart">CART BOX</div>{' '}
+        To replace with Cart component later */}
       </MainContainer>
     </Wrapper>
   );
@@ -62,20 +64,18 @@ const MainContainer = styled.div`
     /* flex-grow: 0.6; */
     flex-basis: 15%;
   }
-  .___cart {
+  /* .___cart {
     border: solid red 2px;
     margin: 0 15px;
-    /* flex-grow: 0.7; */
     flex-basis: 15%;
-    /* position: fixed; */
-  }
+  } */
 `;
 const ItemsContainer = styled.div`
   border: solid green 2px;
   display: flex;
   flex-wrap: wrap;
   /* flex-grow: 4; */
-  flex-basis: 70%;
+  flex-basis: 80%;
 `;
 const Item = styled.div`
   border: solid 2px gray;

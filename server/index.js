@@ -3,7 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const { getProducts, getSomeProducts } = require('./handlers');
+const { getProducts, getSomeProducts, getProductInfo } = require('./handlers');
 
 const PORT = 4000;
 
@@ -30,6 +30,7 @@ express()
 
   .get('/api/products', getProducts) // Returns ALL item info
   .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
+  .get('/api/product-details/:id', getProductInfo)
 
   // Catch all endpoint
   .get('*', (req, res) =>
