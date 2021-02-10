@@ -12,7 +12,6 @@ const BigItem = () => {
     fetch(`/api/product-details/${currentID}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log('Fetch in BigItem.js: ', res.data);
         setItem(res.data);
       })
       .catch((error) => {

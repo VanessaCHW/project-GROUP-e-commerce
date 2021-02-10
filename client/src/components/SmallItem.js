@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 const SmallItem = ({ item }) => {
   return (
-    <Wrapper to="/product/:id">
+    <Wrapper to={`/product/${item._id}`}>
       <div className="img-wrapper">
         <Img src={item.imageSrc} />
       </div>
