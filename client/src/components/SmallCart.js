@@ -19,13 +19,19 @@ const SmallCart = () => {
   return (
     <Container>
       <Div>
-        <h1>Small cart</h1>
+        <h3>Currently in your cart</h3>
+        <Subtotal>
+          <p>Subtotal</p>
+          <span>$00.00</span>
+        </Subtotal>
         {items.map((item) => {
           return (
-            <SmallCartDiv to="/product/:id">
+            <SmallCartDiv to={`/product/${item._id}`}>
               <SmallCartImg src={item.imageSrc} />
-              <SmallCartName>{item.name} </SmallCartName>
-              <SmallCartPrice>{item.price}</SmallCartPrice>
+              <SmallCartInfo>
+                <SmallCartName>{item.name.substring(0, 17)}... </SmallCartName>
+                <SmallCartPrice>{item.price}</SmallCartPrice>
+              </SmallCartInfo>
             </SmallCartDiv>
           );
         })}
@@ -37,19 +43,29 @@ const SmallCart = () => {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  width: 400px;
-
+  height: 100%;
   border: solid 2px black;
 `;
 
 const Div = styled.div`
   flex-direction: column;
-  border: 2px solid black;
+  text-align: center;
+`;
+
+const Subtotal = styled.div`
+  p {
+    margin: 5px;
+  }
+  span {
+    font-weight: bold;
+    color: #b12704;
+  }
 `;
 
 const SmallCartImg = styled.img`
   width: 100px;
   height: 100px;
+  margin: 10px;
   aspect-ratio: auto 100 / 100;
 `;
 
@@ -59,8 +75,11 @@ const SmallCartPrice = styled.p``;
 
 const SmallCartDiv = styled(Link)`
   display: flex;
-  padding: 20px;
-  width: 350px;
+  padding: 10px;
+  width: 300px;
+  text-decoration: none;
 `;
+
+const SmallCartInfo = styled.div``;
 
 export default SmallCart;
