@@ -1,5 +1,5 @@
 const items = require('./data/items.json');
-const companies = require('./data/companies');
+const companies = require('./data/companies.json');
 const e = require('express');
 
 // Returns all items from the inventory
@@ -35,8 +35,23 @@ const getProductInfo = (req, res) => {
   }
 };
 
+//Return data companies
+// const getInfoCompanies = (req, res) => {
+//   let company = companies.find((company) => company._id == req.params.id);
+
+//   if (company) {
+//     res.status(200).json({
+//       status: 200,
+//       data: { ...company },
+//       message: 'Request for product data fulfilled',
+//     });
+//   } else {
+//   }
+// };
+
 module.exports = {
   getProducts,
   getSomeProducts,
   getProductInfo,
+  // getInfoCompanies,
 };
