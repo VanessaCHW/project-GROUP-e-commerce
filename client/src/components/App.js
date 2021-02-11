@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import Homepage from './Homepage';
 import Searched from './Searched';
 import SmallCart from './SmallCart';
+import BigItem from './BigItem';
 
 function App() {
   // const [bacon, setBacon] = useState(null);
@@ -49,7 +50,7 @@ function App() {
               <Searched />
             </Route>
             <Route exact path="/product/:id">
-              <p>Item page</p>
+              <BigItem />
             </Route>
           </Switch>
         </Body>
