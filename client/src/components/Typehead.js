@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 const Typehead = ({ suggestions }) => {
   const [value, setValue] = React.useState('');
   const [suggestionIndex, setSuggestionIndex] = React.useState(0);
+  const history = useHistory();
   const matchedSuggestions =
     value.length > 1
       ? suggestions.filter((suggestion) =>
@@ -14,10 +16,14 @@ const Typehead = ({ suggestions }) => {
     // window.alert(suggestion);
     console.log(suggestion); //Will probably use history.push and a random URL to get an array of the matchedSuggestion
   };
+  const handleBackToHomepage = () => {
+    history.push('/');
+  };
+
   return (
     <>
       <Wrapper>
-        <Logo>LOGO</Logo>
+        <Logo onClick={handleBackToHomepage}>LOGO</Logo>
         <div className="wrapper-helper">
           <div className="inputContainer">
             <input
