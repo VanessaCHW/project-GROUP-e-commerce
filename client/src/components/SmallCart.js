@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const SmallCart = () => {
-  const [items, setItems] = React.useState(null);
-  const [status, setStatus] = React.useState('loading');
-  React.useEffect(() => {
+  const [items, setItems] = useState(null);
+  const [status, setStatus] = useState('loading');
+  useEffect(() => {
     fetch('/api/someproducts')
       .then((res) => res.json())
       .then((json) => {

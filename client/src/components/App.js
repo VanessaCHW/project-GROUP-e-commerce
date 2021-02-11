@@ -5,6 +5,7 @@ import GlobalStyles from './Globalstyles';
 
 import Searched from './Searched';
 import SmallCart from './SmallCart';
+import Cart from './Cart';
 import BigItem from './BigItem';
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
             <Route exact path="/product/:id">
               <BigItem />
             </Route>
+            <Route exact path="/cart">
+              <Cart />
+            </Route>
           </Switch>
         </Body>
         <SmallCart />
@@ -39,7 +43,7 @@ function App() {
 
 const Main = styled.div`
   display: flex;
-  height: 100vh;
+  height: 100%;
 `;
 
 const Body = styled.div`
