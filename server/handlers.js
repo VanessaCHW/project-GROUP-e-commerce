@@ -21,7 +21,6 @@ const getSomeProducts = (req, res) => {
   });
 };
 
-<<<<<<< HEAD
 const getCategory = (req, res) => {
   //Get the category from the url ('/api/category/:category)
   const itemCategory = req.params.categoryId;
@@ -43,7 +42,8 @@ const getCategory = (req, res) => {
     });
   } else {
     res.status(404).json({ status: 404, error: `${itemCategory} not found` });
-=======
+  }
+};
 //Returns data for a single product
 const getProductInfo = (req, res) => {
   let item = items.find((item) => item._id == req.params.id);
@@ -55,16 +55,13 @@ const getProductInfo = (req, res) => {
       message: 'Request for product data fulfilled',
     });
   } else {
->>>>>>> 124c134349d2bf45aaa8866797f8d695cd685880
+    res.status(404).json({ status: 404, error: `${itemCategory} not found` });
   }
 };
 
 module.exports = {
   getProducts,
   getSomeProducts,
-<<<<<<< HEAD
   getCategory,
-=======
   getProductInfo,
->>>>>>> 124c134349d2bf45aaa8866797f8d695cd685880
 };

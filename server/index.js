@@ -3,11 +3,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-<<<<<<< HEAD
-const { getProducts, getSomeProducts, getCategory } = require('./handlers');
-=======
-const { getProducts, getSomeProducts, getProductInfo } = require('./handlers');
->>>>>>> 124c134349d2bf45aaa8866797f8d695cd685880
+const {
+  getProducts,
+  getSomeProducts,
+  getCategory,
+  getProductInfo,
+} = require('./handlers');
+// const { getProducts, getSomeProducts, getProductInfo } = require('./handlers');
 
 const PORT = 4000;
 
@@ -34,11 +36,8 @@ express()
 
   .get('/api/products', getProducts) // Returns ALL item info
   .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
-<<<<<<< HEAD
   .get('/api/category/:categoryId', getCategory)
-=======
   .get('/api/product-details/:id', getProductInfo)
->>>>>>> 124c134349d2bf45aaa8866797f8d695cd685880
 
   // Catch all endpoint
   .get('*', (req, res) =>
