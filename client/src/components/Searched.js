@@ -1,16 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
-import Typehead from './Typehead';
 
 const Searched = () => {
   const [items, setItems] = React.useState(null);
   const [status, setStatus] = React.useState('loading');
+  const { categoryId } = useParams();
+  console.log(categoryId, 'categoryId');
+
+  // React.useEffect(() => {
+  //   fetch('/api/someproducts')
+  //     .then((res) => res.json())
+  //     .then((json) => {
+  //       setItems(json.data);
+  //       setStatus('idle');
+  //     });
+  // }, []);
 
   React.useEffect(() => {
-    fetch('/api/someproducts')
+    fetch(`/api/category/${categoryId}`)
       .then((res) => res.json())
       .then((json) => {
         setItems(json.data);
@@ -23,33 +34,23 @@ const Searched = () => {
   }
   return (
     <Wrapper>
-      <MainContainer>
-        <div className="___filterExample">FILTER BOX</div>{' '}
-        {/*To replace with filter component later*/}
-        <ItemsContainer>
-          {items.map((item) => {
-            // return <Item>{item.name}</Item>;
-            return <SmallItem item={item} />;
-          })}
-        </ItemsContainer>
-      </MainContainer>
+      <div className="___filterExample">FILTER BOX</div>{' '}
+      {/*To replace with filter component later*/}
+      <ItemsContainer>
+        {items.map((item) => {
+          // return <Item>{item.name}</Item>;
+          return <SmallItem item={item} />;
+        })}
+      </ItemsContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  height: 100vh;
-
-  nav {
-    border: 2px black solid;
-    height: 5%;
-  }
-`;
-const MainContainer = styled.div`
   border: solid blue 2px;
-  /* margin-top: 20px; */
   height: 90%;
   display: flex;
+  height: 100vh;
 
   .___filterExample {
     border: solid red 2px;

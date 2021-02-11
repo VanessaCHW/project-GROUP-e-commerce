@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 const SmallItem = ({ item }) => {
   return (
     <Wrapper to="/product/:id">

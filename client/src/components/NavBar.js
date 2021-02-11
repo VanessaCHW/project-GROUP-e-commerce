@@ -4,7 +4,10 @@ import styled from 'styled-components';
 const NavBar = () => {
   return (
     <Wrapper>
-      <nav>NAVIGATION BAR</nav>
+      <Nav>
+        {/* TODO: Add the rest of the categories */}
+        <a href="/category/fitness">Fitness</a>
+      </Nav>
     </Wrapper>
   );
 };
@@ -15,4 +18,5 @@ const Wrapper = styled.div`
     padding: 5px 0;
   }
 `;
+const Nav = styled.nav``;
 export default NavBar;

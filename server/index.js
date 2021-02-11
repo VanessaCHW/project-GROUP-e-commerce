@@ -30,7 +30,7 @@ express()
 
   .get('/api/products', getProducts) // Returns ALL item info
   .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
-  .get('/api/category/:category', getCategory)
+  .get('/api/category/:categoryId', getCategory)
 
   // Catch all endpoint
   .get('*', (req, res) =>

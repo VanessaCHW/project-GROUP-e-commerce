@@ -3,10 +3,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import GlobalStyles from './Globalstyles';
 
-import Searched from './Searched';
-import SmallCart from './SmallCart';
 import Typehead from './Typehead';
 import NavBar from './NavBar';
+import Homepage from './Homepage';
+import Searched from './Searched';
+import SmallCart from './SmallCart';
 
 function App() {
   // const [bacon, setBacon] = useState(null);
@@ -42,6 +43,9 @@ function App() {
         <Body>
           <Switch>
             <Route exact path="/">
+              <Homepage />
+            </Route>
+            <Route exact path="/category/:categoryId">
               <Searched />
             </Route>
             <Route exact path="/product/:id">

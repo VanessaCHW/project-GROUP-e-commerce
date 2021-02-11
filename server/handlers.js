@@ -22,7 +22,7 @@ const getSomeProducts = (req, res) => {
 
 const getCategory = (req, res) => {
   //Get the category from the url ('/api/category/:category)
-  const itemCategory = req.params.category;
+  const itemCategory = req.params.categoryId;
 
   //Check if the category exist first, if not, send an error
   if (
