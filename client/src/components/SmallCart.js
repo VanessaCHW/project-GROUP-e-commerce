@@ -31,6 +31,7 @@ const SmallCart = () => {
               <SmallCartInfo>
                 <SmallCartName>{item.name.substring(0, 17)}... </SmallCartName>
                 <SmallCartPrice>{item.price}</SmallCartPrice>
+                <SmallCartQuantity>Quantity: 1</SmallCartQuantity>
               </SmallCartInfo>
             </SmallCartDiv>
           );
@@ -50,6 +51,9 @@ const Container = styled.div`
 const Div = styled.div`
   flex-direction: column;
   text-align: center;
+  h3 {
+    margin: 5px;
+  }
 `;
 
 const Subtotal = styled.div`
@@ -73,13 +77,19 @@ const SmallCartName = styled.p``;
 
 const SmallCartPrice = styled.p``;
 
+const SmallCartQuantity = styled.p``;
+
 const SmallCartDiv = styled(Link)`
   display: flex;
   padding: 10px;
-  width: 300px;
+  width: 320px;
   text-decoration: none;
+  /* margin: 5px; */
 `;
 
-const SmallCartInfo = styled.div``;
+const SmallCartInfo = styled.div`
+  font-size: 14px;
+  line-height: 10px;
+`;
 
 export default SmallCart;
