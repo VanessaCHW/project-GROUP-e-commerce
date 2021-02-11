@@ -17,17 +17,12 @@ const Searched = () => {
         setStatus('idle');
       });
   }, []);
-  // if (status === 'idle') {
-  //   console.log(items, 'items');
-  // }
 
   if (status === 'loading') {
     return <div>Loading...</div>;
   }
   return (
     <Wrapper>
-      <Typehead suggestions={items} />
-      <nav>NAVIGATION BAR</nav> {/*To replace with Nav component later*/}
       <MainContainer>
         <div className="___filterExample">FILTER BOX</div>{' '}
         {/*To replace with filter component later*/}
@@ -37,8 +32,6 @@ const Searched = () => {
             return <SmallItem item={item} />;
           })}
         </ItemsContainer>
-        {/* <div className="___cart">CART BOX</div>{' '}
-        To replace with Cart component later */}
       </MainContainer>
     </Wrapper>
   );
@@ -54,27 +47,20 @@ const Wrapper = styled.div`
 `;
 const MainContainer = styled.div`
   border: solid blue 2px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   height: 90%;
   display: flex;
 
   .___filterExample {
     border: solid red 2px;
     margin: 0 15px;
-    /* flex-grow: 0.6; */
     flex-basis: 15%;
   }
-  /* .___cart {
-    border: solid red 2px;
-    margin: 0 15px;
-    flex-basis: 15%;
-  } */
 `;
 const ItemsContainer = styled.div`
   border: solid green 2px;
   display: flex;
   flex-wrap: wrap;
-  /* flex-grow: 4; */
   flex-basis: 80%;
 `;
 const Item = styled.div`

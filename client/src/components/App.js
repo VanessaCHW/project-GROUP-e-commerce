@@ -5,20 +5,39 @@ import GlobalStyles from './Globalstyles';
 
 import Searched from './Searched';
 import SmallCart from './SmallCart';
+import Typehead from './Typehead';
+import NavBar from './NavBar';
 
 function App() {
-  const [bacon, setBacon] = useState(null);
+  // const [bacon, setBacon] = useState(null);
+  const [items, setItems] = React.useState(null);
+  const [status, setStatus] = React.useState('loading');
 
-  useEffect(() => {
-    fetch('/bacon')
+  // useEffect(() => {
+  //   fetch('/bacon')
+  //     .then((res) => res.json())
+  //     .then((data) => setBacon(data));
+  // }, []);
+  React.useEffect(() => {
+    fetch('/api/someproducts')
       .then((res) => res.json())
-      .then((data) => setBacon(data));
+      .then((json) => {
+        setItems(json.data);
+        setStatus('idle');
+      });
   }, []);
 
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
   return (
     <BrowserRouter>
       <GlobalStyles />
       {/* {bacon ? bacon : `...where is my all my bacon?...`} */}
+      <Header>
+        <Typehead suggestions={items} />
+        <NavBar />
+      </Header>
       <Main>
         <Body>
           <Switch>
@@ -36,6 +55,7 @@ function App() {
   );
 }
 
+const Header = styled.div``;
 const Main = styled.div`
   display: flex;
   height: 100vh;
