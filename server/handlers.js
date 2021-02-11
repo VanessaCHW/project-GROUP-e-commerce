@@ -32,11 +32,22 @@ const getProductInfo = (req, res) => {
       message: 'Request for product data fulfilled',
     });
   } else {
+    /* TODO: error in case invalid ID*/
   }
+};
+
+//Returns companies data
+const getCompanies = (req, res) => {
+  res.status(200).json({
+    status: 200,
+    data: { ...companies },
+    message: 'Request for companies fulfilled',
+  });
 };
 
 module.exports = {
   getProducts,
   getSomeProducts,
   getProductInfo,
+  getCompanies,
 };

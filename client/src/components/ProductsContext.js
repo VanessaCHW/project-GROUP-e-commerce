@@ -6,6 +6,9 @@ export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState(null);
   const [productsStatus, setProductsStatus] = useState('loading');
 
+  const [companies, setCompanies] = useState(null);
+  const [companiesStatus, setCompaniesStatus] = useState('loading');
+
   // Returns an array of ALL products
   useEffect(() => {
     setProductsStatus('loading');
@@ -23,8 +26,27 @@ export const ProductsProvider = ({ children }) => {
       });
   }, []);
 
+  //Returns all companies
+  //Move to another Context????
+  useEffect(() => {
+    setCompaniesStatus('loading');
+    fetch('/api/companies')
+      .then((res) => res.json())
+      .then((res) => {
+        setCompanies(Object.values(res.data));
+        console.log(Object.values(res.data));
+        setCompaniesStatus('idle');
+      })
+      .catch((error) => {
+        console.error('Error: unable to retrieve companies', error);
+        setCompaniesStatus('error');
+      });
+  }, []);
+
   return (
-    <ProductsContext.Provider value={{ products, productsStatus }}>
+    <ProductsContext.Provider
+      value={{ products, productsStatus, companies, companiesStatus }}
+    >
       {children}
     </ProductsContext.Provider>
   );

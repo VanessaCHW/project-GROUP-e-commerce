@@ -1,12 +1,15 @@
 //This component is used in a specific product page
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
+import { ProductsContext } from './ProductsContext';
 
 const BigItem = () => {
   let currentID = useParams().id;
   const [item, setItem] = useState(null);
+  const { companies } = useContext(ProductsContext);
+  const [vendor, setVendor] = useState(null);
 
   useEffect(() => {
     fetch(`/api/product-details/${currentID}`)
@@ -19,6 +22,13 @@ const BigItem = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (item && companies) {
+      let company = companies.find((company) => company._id === item.companyId);
+      setVendor(company);
+    }
+  }, [item, companies]);
+
   if (item) {
     return (
       <Wrapper>
@@ -29,9 +39,22 @@ const BigItem = () => {
           </ImgContainer>
           <InfoBox>
             <Name>{item.name}</Name>
-            <Vendor to="#">Vendor name {item.companyId}</Vendor>
+            {vendor ? (
+              <Vendor target="_blank" href={vendor.url}>
+                Visit the {vendor.name} website
+              </Vendor>
+            ) : null}
+            <hr />
+            <Tags>
+              <div>{item.category.toLowerCase()}</div>
+              <div>{item.body_location.toLowerCase()}</div>
+            </Tags>
             <Price>{item.price.slice(1)} $</Price>
-            <div>Stock: {item.numInStock}</div>
+            {item.numInStock > 0 ? (
+              <div>In stock</div>
+            ) : (
+              <div>Out of stock</div>
+            )}
             <button>-</button>
             <Quantity type="text" />
             <button>+</button>
@@ -49,14 +72,28 @@ const BigItem = () => {
     );
   }
 };
-const Quantity = styled.input`
-  width: 30px;
+
+const Tags = styled.div`
+  display: flex;
+  flex-direction: row;
+  div {
+    background-color: #d1e0e0;
+    margin-right: 5px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
 `;
+
 const Wrapper = styled.div`
   width: 100%;
   nav {
     border: 2px black solid;
     height: 5%;
+  }
+  hr {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
   }
 `;
 
@@ -88,17 +125,18 @@ const Name = styled.div`
   line-height: 2rem;
   margin-bottom: 10px;
 `;
-const Vendor = styled(Link)`
+const Vendor = styled.a`
   text-decoration: none;
   color: #629d9d;
   &:hover {
-    color: magenta;
+    color: #cca300;
+    cursor: pointer;
   }
 `;
 const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 500;
-  margin: 20px 0 20px;
+  margin: 40px 0 20px 0;
 `;
 
 const Button = styled.button`
@@ -107,7 +145,7 @@ const Button = styled.button`
   color: white;
   border: 1px solid black;
   padding: 10px;
-  width: 100%;
+  width: 50%;
   margin: 10px 0;
 
   &:hover {
@@ -115,15 +153,8 @@ const Button = styled.button`
     background-color: gray;
   }
 `;
-
-const OutOfStock = styled.div`
-  font-size: 0.8rem;
-  color: #ff8080;
-`;
-
-const InStock = styled.div`
-  font-size: 0.8rem;
-  color: #75a3a3;
+const Quantity = styled.input`
+  width: 30px;
 `;
 
 export default BigItem;
