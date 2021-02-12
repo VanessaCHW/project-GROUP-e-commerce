@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const SmallCart = () => {
-  const [items, setItems] = React.useState(null);
-  const [status, setStatus] = React.useState('loading');
-  React.useEffect(() => {
+  const [items, setItems] = useState(null);
+  const [status, setStatus] = useState('loading');
+  useEffect(() => {
     fetch('/api/someproducts')
       .then((res) => res.json())
       .then((json) => {
@@ -19,13 +19,20 @@ const SmallCart = () => {
   return (
     <Container>
       <Div>
-        <h1>Small cart</h1>
+        <h3>Currently in your cart</h3>
+        <Subtotal>
+          <p>Subtotal</p>
+          <span>$00.00</span>
+        </Subtotal>
         {items.map((item) => {
           return (
-            <SmallCartDiv to="/product/:id">
+            <SmallCartDiv to={`/product/${item._id}`}>
               <SmallCartImg src={item.imageSrc} />
-              <SmallCartName>{item.name} </SmallCartName>
-              <SmallCartPrice>{item.price}</SmallCartPrice>
+              <SmallCartInfo>
+                <SmallCartName>{item.name.substring(0, 17)}... </SmallCartName>
+                <SmallCartPrice>{item.price}</SmallCartPrice>
+                <SmallCartQuantity>Quantity: 1</SmallCartQuantity>
+              </SmallCartInfo>
             </SmallCartDiv>
           );
         })}
@@ -37,19 +44,32 @@ const SmallCart = () => {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  width: 400px;
-
+  height: 100%;
   border: solid 2px black;
 `;
 
 const Div = styled.div`
   flex-direction: column;
-  border: 2px solid black;
+  text-align: center;
+  h3 {
+    margin: 5px;
+  }
+`;
+
+const Subtotal = styled.div`
+  p {
+    margin: 5px;
+  }
+  span {
+    font-weight: bold;
+    color: #b12704;
+  }
 `;
 
 const SmallCartImg = styled.img`
   width: 100px;
   height: 100px;
+  margin: 10px;
   aspect-ratio: auto 100 / 100;
 `;
 
@@ -57,10 +77,19 @@ const SmallCartName = styled.p``;
 
 const SmallCartPrice = styled.p``;
 
+const SmallCartQuantity = styled.p``;
+
 const SmallCartDiv = styled(Link)`
   display: flex;
-  padding: 20px;
-  width: 350px;
+  padding: 10px;
+  width: 320px;
+  text-decoration: none;
+  /* margin: 5px; */
+`;
+
+const SmallCartInfo = styled.div`
+  font-size: 14px;
+  line-height: 10px;
 `;
 
 export default SmallCart;

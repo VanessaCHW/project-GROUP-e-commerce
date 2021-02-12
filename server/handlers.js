@@ -1,5 +1,5 @@
 const items = require('./data/items.json');
-const companies = require('./data/companies');
+const companies = require('./data/companies.json');
 const e = require('express');
 
 // Returns all items from the inventory
