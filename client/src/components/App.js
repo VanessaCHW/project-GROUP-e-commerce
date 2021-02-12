@@ -9,17 +9,12 @@ import Homepage from './Homepage';
 import Searched from './Searched';
 import SmallCart from './SmallCart';
 import BigItem from './BigItem';
+import TestPage from './TestPage';
 
 function App() {
-  // const [bacon, setBacon] = useState(null);
   const [items, setItems] = React.useState(null);
   const [status, setStatus] = React.useState('loading');
 
-  // useEffect(() => {
-  //   fetch('/bacon')
-  //     .then((res) => res.json())
-  //     .then((data) => setBacon(data));
-  // }, []);
   React.useEffect(() => {
     fetch('/api/someproducts')
       .then((res) => res.json())
@@ -51,6 +46,9 @@ function App() {
             </Route>
             <Route exact path="/product/:id">
               <BigItem />
+            </Route>
+            <Route exact path="/test">
+              <TestPage />
             </Route>
           </Switch>
         </Body>
