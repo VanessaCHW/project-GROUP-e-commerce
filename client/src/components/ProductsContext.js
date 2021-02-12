@@ -34,7 +34,7 @@ export const ProductsProvider = ({ children }) => {
       .then((res) => res.json())
       .then((res) => {
         setCompanies(Object.values(res.data));
-        console.log(Object.values(res.data));
+        //console.log(Object.values(res.data));
         setCompaniesStatus('idle');
       })
       .catch((error) => {

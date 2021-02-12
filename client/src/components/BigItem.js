@@ -2,15 +2,17 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
 
 const BigItem = () => {
   let currentID = useParams().id;
   const [item, setItem] = useState(null);
-  const { companies } = useContext(ProductsContext);
-  const [vendor, setVendor] = useState(null);
+  const { companies } = useContext(ProductsContext); //array of all companies
+  const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
+  const [quantityBox, setQuantityBox] = useState(0);
 
+  // Use the product ID to fetch all product data
   useEffect(() => {
     fetch(`/api/product-details/${currentID}`)
       .then((res) => res.json())
@@ -22,6 +24,8 @@ const BigItem = () => {
       });
   }, []);
 
+  // Determine the vendor name by using a filter.
+  // Using a hook for now because 'item' and 'companies' take time to load.
   useEffect(() => {
     if (item && companies) {
       let company = companies.find((company) => company._id === item.companyId);
@@ -29,21 +33,18 @@ const BigItem = () => {
     }
   }, [item, companies]);
 
-  if (item) {
+  if (item && vendor) {
     return (
       <Wrapper>
-        <nav>NAVIGATION BAR</nav>
         <Content>
           <ImgContainer>
             <Img src={item.imageSrc} />
           </ImgContainer>
           <InfoBox>
             <Name>{item.name}</Name>
-            {vendor ? (
-              <Vendor target="_blank" href={vendor.url}>
-                Visit the {vendor.name} website
-              </Vendor>
-            ) : null}
+            <Vendor target="_blank" href={vendor.url}>
+              Visit the {vendor.name} website
+            </Vendor>
             <hr />
             <Tags>
               <div>{item.category.toLowerCase()}</div>
@@ -55,11 +56,29 @@ const BigItem = () => {
             ) : (
               <div>Out of stock</div>
             )}
-            <button>-</button>
-            <Quantity type="text" />
-            <button>+</button>
-            <div></div>
-            <Button>ADD TO CART</Button>
+            <QuantityButtons>
+              <button
+                onClick={() => setQuantityBox(quantityBox - 1)}
+                disabled={
+                  item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
+                }
+              >
+                -
+              </button>
+              <Quantity
+                value={quantityBox}
+                onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
+              />
+              <button
+                onClick={() => setQuantityBox(quantityBox + 1)}
+                disabled={item.numInStock > 0 ? false : true}
+              >
+                +
+              </button>
+            </QuantityButtons>
+            <Button disabled={item.numInStock > 0 ? false : true}>
+              ADD TO CART
+            </Button>
           </InfoBox>
         </Content>
       </Wrapper>
@@ -72,18 +91,6 @@ const BigItem = () => {
     );
   }
 };
-
-const Tags = styled.div`
-  display: flex;
-  flex-direction: row;
-  div {
-    background-color: #d1e0e0;
-    margin-right: 5px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    padding: 0 5px;
-  }
-`;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -133,6 +140,18 @@ const Vendor = styled.a`
     cursor: pointer;
   }
 `;
+const Tags = styled.div`
+  display: flex;
+  flex-direction: row;
+  div {
+    background-color: #d1e0e0;
+    margin-right: 5px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+`;
+
 const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 500;
@@ -151,10 +170,20 @@ const Button = styled.button`
   &:hover {
     cursor: pointer;
     background-color: gray;
+    &:disabled {
+      cursor: not-allowed;
+      background-color: black;
+    }
   }
 `;
-const Quantity = styled.input`
-  width: 30px;
+const Quantity = styled.textarea`
+  width: 40px;
+  height: 26px;
+  text-align: center;
+  resize: none;
 `;
-
+const QuantityButtons = styled.div`
+  display: flex;
+  align-items: center;
+`;
 export default BigItem;
