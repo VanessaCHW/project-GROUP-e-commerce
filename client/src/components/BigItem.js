@@ -1,13 +1,18 @@
 //This component is used in a specific product page
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { ProductsContext } from './ProductsContext';
 
 const BigItem = () => {
   let currentID = useParams().id;
   const [item, setItem] = useState(null);
+  const { companies } = useContext(ProductsContext); //array of all companies
+  const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
+  const [quantityBox, setQuantityBox] = useState(0);
 
+  // Use the product ID to fetch all product data
   useEffect(() => {
     fetch(`/api/product-details/${currentID}`)
       .then((res) => res.json())
@@ -19,24 +24,61 @@ const BigItem = () => {
       });
   }, []);
 
-  if (item) {
+  // Determine the vendor name by using a filter.
+  // Using a hook for now because 'item' and 'companies' take time to load.
+  useEffect(() => {
+    if (item && companies) {
+      let company = companies.find((company) => company._id === item.companyId);
+      setVendor(company);
+    }
+  }, [item, companies]);
+
+  if (item && vendor) {
     return (
       <Wrapper>
-        <nav>NAVIGATION BAR</nav>
         <Content>
           <ImgContainer>
             <Img src={item.imageSrc} />
           </ImgContainer>
           <InfoBox>
             <Name>{item.name}</Name>
-            <Vendor to="#">Vendor name {item.companyId}</Vendor>
+            <Vendor target="_blank" href={vendor.url}>
+              Visit the {vendor.name} website
+            </Vendor>
+            <hr />
+            <Tags>
+              <div>{item.category.toLowerCase()}</div>
+              <div>{item.body_location.toLowerCase()}</div>
+            </Tags>
             <Price>{item.price.slice(1)} $</Price>
-            <div>Stock: {item.numInStock}</div>
-            <button>-</button>
-            <Quantity type="text" />
-            <button>+</button>
-            <div></div>
-            <Button>ADD TO CART</Button>
+            {item.numInStock > 0 ? (
+              <div>In stock</div>
+            ) : (
+              <div>Out of stock</div>
+            )}
+            <QuantityButtons>
+              <button
+                onClick={() => setQuantityBox(quantityBox - 1)}
+                disabled={
+                  item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
+                }
+              >
+                -
+              </button>
+              <Quantity
+                value={quantityBox}
+                onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
+              />
+              <button
+                onClick={() => setQuantityBox(quantityBox + 1)}
+                disabled={item.numInStock > 0 ? false : true}
+              >
+                +
+              </button>
+            </QuantityButtons>
+            <Button disabled={item.numInStock > 0 ? false : true}>
+              ADD TO CART
+            </Button>
           </InfoBox>
         </Content>
       </Wrapper>
@@ -49,14 +91,16 @@ const BigItem = () => {
     );
   }
 };
-const Quantity = styled.input`
-  width: 30px;
-`;
+
 const Wrapper = styled.div`
   width: 100%;
   nav {
     border: 2px black solid;
     height: 5%;
+  }
+  hr {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
   }
 `;
 
@@ -88,17 +132,30 @@ const Name = styled.div`
   line-height: 2rem;
   margin-bottom: 10px;
 `;
-const Vendor = styled(Link)`
+const Vendor = styled.a`
   text-decoration: none;
   color: #629d9d;
   &:hover {
-    color: magenta;
+    color: #cca300;
+    cursor: pointer;
   }
 `;
+const Tags = styled.div`
+  display: flex;
+  flex-direction: row;
+  div {
+    background-color: #d1e0e0;
+    margin-right: 5px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+`;
+
 const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 500;
-  margin: 20px 0 20px;
+  margin: 40px 0 20px 0;
 `;
 
 const Button = styled.button`
@@ -107,23 +164,26 @@ const Button = styled.button`
   color: white;
   border: 1px solid black;
   padding: 10px;
-  width: 100%;
+  width: 50%;
   margin: 10px 0;
 
   &:hover {
     cursor: pointer;
     background-color: gray;
+    &:disabled {
+      cursor: not-allowed;
+      background-color: black;
+    }
   }
 `;
-
-const OutOfStock = styled.div`
-  font-size: 0.8rem;
-  color: #ff8080;
+const Quantity = styled.textarea`
+  width: 40px;
+  height: 26px;
+  text-align: center;
+  resize: none;
 `;
-
-const InStock = styled.div`
-  font-size: 0.8rem;
-  color: #75a3a3;
+const QuantityButtons = styled.div`
+  display: flex;
+  align-items: center;
 `;
-
 export default BigItem;

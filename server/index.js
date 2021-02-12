@@ -7,7 +7,8 @@ const {
   getProducts,
   getSomeProducts,
   getProductInfo,
-  // getInfoCompanies,
+  getCategory,
+  getCompanies,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -33,10 +34,11 @@ express()
   // REST endpoints?
   .get('/bacon', (req, res) => res.status(200).json('🥓'))
 
-  // .get('/api/companies/:id', getInfoCompanies) // return info companies
   .get('/api/products', getProducts) // Returns ALL item info
   .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
+  .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
+  .get('/api/companies', getCompanies)
 
   // Catch all endpoint
   .get('*', (req, res) =>

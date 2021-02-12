@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 const SmallItem = ({ item }) => {
   return (
     <Wrapper to={`/product/${item._id}`}>
@@ -62,6 +63,7 @@ const Name = styled.div`
 const Img = styled.img`
   width: 100%;
   height: auto;
+  max-height: 100%;
 `;
 
 export default SmallItem;
