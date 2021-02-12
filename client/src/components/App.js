@@ -10,7 +10,6 @@ import Searched from './Searched';
 import SmallCart from './SmallCart';
 import Cart from './Cart';
 import BigItem from './BigItem';
-import TestPage from './TestPage';
 
 function App() {
   const [items, setItems] = React.useState(null);
