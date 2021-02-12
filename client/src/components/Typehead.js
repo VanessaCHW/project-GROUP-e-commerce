@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 const Typehead = ({ suggestions }) => {
   const [value, setValue] = React.useState('');
-  const [suggestionIndex, setSuggestionIndex] = React.useState(0);
+  const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
   const history = useHistory();
   const matchedSuggestions =
     value.length > 1
@@ -21,99 +21,99 @@ const Typehead = ({ suggestions }) => {
   };
 
   return (
-    <>
-      <Wrapper>
-        <Logo onClick={handleBackToHomepage}>LOGO</Logo>
-        <div className="wrapper-helper">
-          <div className="inputContainer">
-            <input
-              type="text"
-              value={value}
-              onChange={(ev) => setValue(ev.target.value)}
-              onKeyDown={(ev) => {
-                switch (ev.key) {
-                  case 'Enter': {
+    <Wrapper>
+      <Logo onClick={handleBackToHomepage}>LOGO</Logo>
+      <div className="wrapper-helper">
+        <div className="inputContainer">
+          <input
+            type="text"
+            value={value}
+            onChange={(ev) => setValue(ev.target.value)}
+            onKeyDown={(ev) => {
+              switch (ev.key) {
+                case 'Enter': {
+                  if (suggestionIndex === -1) {
                     handleSelect(matchedSuggestions);
                     return;
                   }
-                  case 'ArrowUp': {
-                    if (suggestionIndex > 0) {
-                      setSuggestionIndex(suggestionIndex - 1);
-                    }
-                    return;
-                  }
-                  case 'ArrowDown':
-                    {
-                      if (matchedSuggestions.length - 1 > suggestionIndex) {
-                        setSuggestionIndex(suggestionIndex + 1);
-                      }
-                    }
-                    return;
+                  handleSelect(matchedSuggestions[suggestionIndex]);
+                  return;
                 }
-              }}
-            />
-            <button className="clearBtn" onClick={() => setValue('')}>
-              Clear
-            </button>
-          </div>
-          <ul>
-            {matchedSuggestions.map((suggestion, i) => {
-              const slicedIndex = suggestion.name
-                .toLowerCase()
-                .indexOf(value.toLowerCase());
-              //IF sliceIndex === 0
-              const firstPart = suggestion.name.slice(
-                0,
-                slicedIndex + value.length
-              );
-              //IF sliceIndex > 0
-              const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
-              const offFirstPartStartWritten = suggestion.name.slice(
-                slicedIndex,
-                slicedIndex + value.length
-              );
-              //Rest of the suggestion
-              const secondPart = suggestion.name.slice(
-                slicedIndex + value.length
-              );
-              const isSelected =
-                matchedSuggestions.indexOf(suggestion) === suggestionIndex
-                  ? true
-                  : false;
-              return (
-                <Suggestion
-                  key={suggestion._id}
-                  onClick={() => handleSelect(suggestion.name)}
-                  style={{
-                    background: isSelected
-                      ? 'hsla(50deg, 100%, 80%, 0.25)'
-                      : 'transparent',
-                  }}
-                  onMouseEnter={() => {
-                    setSuggestionIndex(i);
-                  }}
-                >
-                  {slicedIndex === 0 ? (
-                    <span className="written-part">{firstPart}</span>
-                  ) : (
-                    <>
-                      <span>{offFirstPartStart}</span>
-                      <span className="written-part">
-                        {offFirstPartStartWritten}
-                      </span>
-                    </>
-                  )}
-                  <span>{secondPart}</span>
-                  <span className="item-category">
-                    in {suggestion.category}
-                  </span>
-                </Suggestion>
-              );
-            })}
-          </ul>
+                case 'ArrowUp': {
+                  if (suggestionIndex > -1) {
+                    setSuggestionIndex(suggestionIndex - 1);
+                  }
+                  return;
+                }
+                case 'ArrowDown':
+                  {
+                    if (matchedSuggestions.length - 1 > suggestionIndex) {
+                      setSuggestionIndex(suggestionIndex + 1);
+                    }
+                  }
+                  return;
+              }
+            }}
+          />
+          <button className="clearBtn" onClick={() => setValue('')}>
+            Clear
+          </button>
         </div>
-      </Wrapper>
-    </>
+        <ul>
+          {matchedSuggestions.map((suggestion, i) => {
+            const slicedIndex = suggestion.name
+              .toLowerCase()
+              .indexOf(value.toLowerCase());
+            //IF sliceIndex === 0
+            const firstPart = suggestion.name.slice(
+              0,
+              slicedIndex + value.length
+            );
+            //IF sliceIndex > 0
+            const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
+            const offFirstPartStartWritten = suggestion.name.slice(
+              slicedIndex,
+              slicedIndex + value.length
+            );
+            //Rest of the suggestion
+            const secondPart = suggestion.name.slice(
+              slicedIndex + value.length
+            );
+            const isSelected =
+              matchedSuggestions.indexOf(suggestion) === suggestionIndex
+                ? true
+                : false;
+            return (
+              <Suggestion
+                key={suggestion._id}
+                onClick={() => handleSelect(suggestion.name)}
+                style={{
+                  background: isSelected
+                    ? 'hsla(50deg, 100%, 80%, 0.25)'
+                    : 'transparent',
+                }}
+                onMouseEnter={() => {
+                  setSuggestionIndex(i);
+                }}
+              >
+                {slicedIndex === 0 ? (
+                  <span className="written-part">{firstPart}</span>
+                ) : (
+                  <>
+                    <span>{offFirstPartStart}</span>
+                    <span className="written-part">
+                      {offFirstPartStartWritten}
+                    </span>
+                  </>
+                )}
+                <span>{secondPart}</span>
+                <span className="item-category">in {suggestion.category}</span>
+              </Suggestion>
+            );
+          })}
+        </ul>
+      </div>
+    </Wrapper>
   );
 };
 
@@ -124,6 +124,7 @@ const Wrapper = styled.div`
   /* align-items: center; */
   /* flex-direction: column; */
   padding: 10px 0;
+  position: relative;
 
   .wrapper-helper {
     border: solid 2px blue;
@@ -156,8 +157,13 @@ const Wrapper = styled.div`
 `;
 const Logo = styled.div`
   border: solid 2px green;
-  align-self: flex-start;
-  justify-self: flex-start;
+  /* align-self: flex-start;
+  justify-self: flex-start; */
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 10px;
+  padding: 0 20px;
 `;
 
 const Suggestion = styled.li`
