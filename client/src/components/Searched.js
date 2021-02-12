@@ -57,7 +57,7 @@ const Searched = () => {
             <ReactPaginate
               previousLabel={'Previous'}
               nextLabel={'Next'}
-              numPages={numPages}
+              pageCount={numPages}
               onPageChange={handlePageClick}
               containerClassName={'pagination'}
               previousLinkClassName={'previousLink'}
