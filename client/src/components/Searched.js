@@ -31,6 +31,7 @@ const Searched = () => {
       });
   }, []);
 
+  // For pagination links
   function handlePageClick({ selected: selectedPage }) {
     window.scrollTo(0, 0);
     setCurrentPage(selectedPage);
@@ -107,11 +108,18 @@ const Pagination = styled.div`
     list-style: none;
     padding: 0;
     margin-bottom: 40px;
-  }
 
+    .activeLink a {
+      width: 100%;
+      height: 100%;
+      background-color: #b3cccc;
+      font-weight: bold;
+    }
+  }
   .pagination a {
     border: 1px solid black;
     padding: 10px 20px;
+    margin: 2px;
   }
 `;
 export default Searched;
