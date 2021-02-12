@@ -62,7 +62,7 @@ const ItemsContainer = styled.div`
   border: solid green 2px;
   display: flex;
   flex-wrap: wrap;
-  flex-basis: 80%;
+  flex-basis: 82%;
 `;
 const Item = styled.div`
   border: solid 2px gray;
