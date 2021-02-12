@@ -9,16 +9,6 @@ const Searched = () => {
   const [items, setItems] = React.useState(null);
   const [status, setStatus] = React.useState('loading');
   const { categoryId } = useParams();
-  console.log(categoryId, 'categoryId');
-
-  // React.useEffect(() => {
-  //   fetch('/api/someproducts')
-  //     .then((res) => res.json())
-  //     .then((json) => {
-  //       setItems(json.data);
-  //       setStatus('idle');
-  //     });
-  // }, []);
 
   React.useEffect(() => {
     fetch(`/api/category/${categoryId}`)

@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import GlobalStyles from './Globalstyles';
 
+import { ProductsContext } from './ProductsContext';
 import Typehead from './Typehead';
 import NavBar from './NavBar';
 import Homepage from './Homepage';
@@ -12,33 +13,16 @@ import Cart from './Cart';
 import BigItem from './BigItem';
 
 function App() {
-  // const [bacon, setBacon] = useState(null);
-  const [items, setItems] = React.useState(null);
-  const [status, setStatus] = React.useState('loading');
+  const { products, productsStatus } = React.useContext(ProductsContext);
 
-  // useEffect(() => {
-  //   fetch('/bacon')
-  //     .then((res) => res.json())
-  //     .then((data) => setBacon(data));
-  // }, []);
-  React.useEffect(() => {
-    fetch('/api/someproducts')
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json.data);
-        setStatus('idle');
-      });
-  }, []);
-
-  if (status === 'loading') {
+  if (productsStatus === 'loading') {
     return <div>Loading...</div>;
   }
   return (
     <BrowserRouter>
       <GlobalStyles />
-      {/* {bacon ? bacon : `...where is my all my bacon?...`} */}
       <Header>
-        <Typehead suggestions={items} />
+        <Typehead suggestions={products} />
         <NavBar />
       </Header>
       <Main>

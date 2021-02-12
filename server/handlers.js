@@ -4,6 +4,22 @@ const e = require('express');
 
 // Returns all items from the inventory
 const getProducts = (req, res) => {
+  //Get all unqiue categories
+  // const newArr = [];
+  // items.some((item) => {
+  //   if (newArr.includes(item.category)) {
+  //     return;
+  //   } else {
+  //     newArr.push(item.category);
+  //   }
+  // });
+  // console.log(newArr, 'UNIQUE CATEGORY');
+
+  //Simpler way to get all unique categories
+  const uniqueSet = new Set(items.map((item) => item.category));
+  const uniqueArr = [...uniqueSet];
+  console.log(uniqueArr, 'UNIQUE CATEGORY');
+
   res.status(200).json({
     status: 200,
     message: 'Request for all items fulfilled',
