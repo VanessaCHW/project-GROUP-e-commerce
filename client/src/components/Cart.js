@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { ProductsContext } from './ProductsContext';
 
 const Cart = () => {
   const [items, setItems] = useState(null);
-  // const [companies, setCompanies] = useState(null);
+  const { companies } = useContext(ProductsContext);
   const [status, setStatus] = useState('loading');
   useEffect(() => {
     fetch('/api/someproducts')
@@ -109,7 +110,7 @@ const CartPrice = styled.div`
   justify-content: flex-end;
   font-weight: bold;
   font-size: 1.2rem;
-  width: 350px;
+  width: 500px;
 `;
 
 const CartSubtotal = styled.div`

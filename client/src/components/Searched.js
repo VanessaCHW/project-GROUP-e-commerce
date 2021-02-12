@@ -9,7 +9,10 @@ const Searched = () => {
   const [items, setItems] = React.useState(null);
   const [status, setStatus] = React.useState('loading');
   const { categoryId } = useParams();
-  console.log(categoryId, 'categoryId');
+  // console.log(categoryId, 'categoryId');
+  if (status === 'idle') {
+    // console.log(items.length, 'LENGTH');
+  }
 
   // React.useEffect(() => {
   //   fetch('/api/someproducts')
