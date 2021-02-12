@@ -6,11 +6,10 @@ const morgan = require('morgan');
 const {
   getProducts,
   getSomeProducts,
-  getCategory,
   getProductInfo,
+  getCategory,
   getCompanies,
 } = require('./handlers');
-// const { getProducts, getSomeProducts, getProductInfo } = require('./handlers');
 
 const PORT = 4000;
 
