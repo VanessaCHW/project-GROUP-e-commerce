@@ -4,7 +4,8 @@ const e = require('express');
 
 // Returns all items from the inventory
 const getProducts = (req, res) => {
-  //Get all unqiue categories
+  /////Get all unqiue categories
+
   // const newArr = [];
   // items.some((item) => {
   //   if (newArr.includes(item.category)) {
@@ -15,10 +16,11 @@ const getProducts = (req, res) => {
   // });
   // console.log(newArr, 'UNIQUE CATEGORY');
 
-  //Simpler way to get all unique categories
-  const uniqueSet = new Set(items.map((item) => item.category));
-  const uniqueArr = [...uniqueSet];
-  console.log(uniqueArr, 'UNIQUE CATEGORY');
+  /////Simpler way to get all unique categories
+
+  // const uniqueSet = new Set(items.map((item) => item.category));
+  // const uniqueArr = [...uniqueSet];
+  // console.log(uniqueArr, 'UNIQUE CATEGORY');
 
   res.status(200).json({
     status: 200,
@@ -40,16 +42,23 @@ const getSomeProducts = (req, res) => {
 const getCategory = (req, res) => {
   //Get the category from the url ('/api/category/:category)
   const itemCategory = req.params.categoryId;
+  console.log(itemCategory.split('-').join('').toLowerCase());
 
   //Check if the category exist first, if not, send an error
   if (
     items.some((item) => {
-      return item.category.toLowerCase() === itemCategory.toLowerCase();
+      return (
+        item.category.split(' ').join('').toLowerCase() ===
+        itemCategory.split('-').join('').toLowerCase()
+      );
     })
   ) {
     //Filter to get a new array of item from the asked category
     const itemInCategory = items.filter((item) => {
-      return item.category.toLowerCase() === itemCategory.toLowerCase();
+      return (
+        item.category.split(' ').join('').toLowerCase() ===
+        itemCategory.split('-').join('').toLowerCase()
+      );
     });
     res.status(200).json({
       status: 200,
