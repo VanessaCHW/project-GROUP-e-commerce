@@ -113,6 +113,9 @@ const Typehead = ({ suggestions }) => {
           })}
         </ul>
       </div>
+      <CartWrapper>
+        <CartButton href="/cart">Cart</CartButton>
+      </CartWrapper>
     </Wrapper>
   );
 };
@@ -176,6 +179,21 @@ const Suggestion = styled.li`
     padding-left: 30px;
     font-size: 0.8em;
   }
+`;
+
+const CartWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  left: 400px;
+`;
+
+const CartButton = styled.a`
+  border: 2px solid black;
+  text-decoration: none;
+  text-align: center;
+  width: 50px;
+  height: 30px;
 `;
 
 export default Typehead;
