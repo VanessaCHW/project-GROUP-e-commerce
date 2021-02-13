@@ -22,7 +22,7 @@ const BigItem = () => {
       .catch((error) => {
         console.error('Unable to retrieve product details', error);
       });
-  }, []);
+  }, [currentID]);
 
   // Determine the vendor name by using a filter.
   // Using a hook for now because 'item' and 'companies' take time to load.
