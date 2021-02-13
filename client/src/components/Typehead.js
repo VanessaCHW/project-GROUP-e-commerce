@@ -14,7 +14,12 @@ const Typehead = ({ suggestions }) => {
       : [];
   const handleSelect = (suggestion) => {
     // window.alert(suggestion);
-    console.log(suggestion); //Will probably use history.push and a random URL to get an array of the matchedSuggestion
+    if (Array.isArray(suggestion) && suggestion.length > 1) {
+      console.log(suggestion, 'if');
+    } else {
+      history.push(`/product/${suggestion._id}`);
+      console.log(suggestion, 'else');
+    }
   };
   const handleBackToHomepage = () => {
     history.push('/');
@@ -37,6 +42,7 @@ const Typehead = ({ suggestions }) => {
                     return;
                   }
                   handleSelect(matchedSuggestions[suggestionIndex]);
+                  setValue(matchedSuggestions[suggestionIndex].name);
                   return;
                 }
                 case 'ArrowUp': {
