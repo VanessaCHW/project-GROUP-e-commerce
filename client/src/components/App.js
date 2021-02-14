@@ -33,7 +33,8 @@ function App() {
             </Route>
             {/*Route for searched items*/}
             <Route exact path="/searched/:searchedId">
-              <Searched />
+              {/* <Searched /> */}
+              <Homepage />
             </Route>
             <Route exact path="/category/:categoryId">
               <Searched />

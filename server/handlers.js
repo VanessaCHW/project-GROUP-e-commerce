@@ -1,5 +1,6 @@
 const items = require('./data/items.json');
 const companies = require('./data/companies.json');
+const { v4: uuidv4 } = require('uuid');
 const e = require('express');
 
 // Returns all items from the inventory
@@ -96,9 +97,12 @@ const getCompanies = (req, res) => {
 //Add and get a new array of the searched items
 const addSearchArray = (req, res) => {
   let newArray = req.body;
+  const newArrayId = uuidv4();
+
   if (newArray) {
     res.status(200).json({
       status: 200,
+      id: newArrayId,
       data: newArray,
       message: 'New Searched Array added',
     });

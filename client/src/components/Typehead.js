@@ -6,7 +6,7 @@ import uuid from 'uuid';
 const Typehead = ({ suggestions }) => {
   const [value, setValue] = React.useState('');
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
-  const [ulToggle, setUToggle] = React.useState(true);
+  const [ulToggle, setUlToggle] = React.useState(true);
   const history = useHistory();
   const matchedSuggestions =
     value.length > 1
@@ -21,14 +21,18 @@ const Typehead = ({ suggestions }) => {
       console.log(suggestion, 'if');
       fetch('/api/add-search-array', {
         method: 'POST',
-        body: JSON.stringify({ id: uuid.v4(), suggestions: suggestion }),
+        body: JSON.stringify({ suggestions: suggestion }),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
       })
         .then((res) => res.json())
-        .then((json) => console.log(json, 'json'));
+        .then((json) => {
+          console.log(json, 'json');
+          history.push(`/searched/${json.id}`);
+          return;
+        });
     } else {
       history.push(`/product/${suggestion._id}`);
       console.log(suggestion, 'else');
@@ -49,7 +53,7 @@ const Typehead = ({ suggestions }) => {
             value={value}
             onChange={(ev) => {
               setValue(ev.target.value);
-              setUToggle(true);
+              setUlToggle(true);
               return;
             }}
             onKeyDown={(ev) => {
@@ -57,13 +61,14 @@ const Typehead = ({ suggestions }) => {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
                     handleSelect(matchedSuggestions);
+                    setUlToggle(false);
                     return;
                   } else {
                     handleSelect(matchedSuggestions[suggestionIndex]);
                     setValue(matchedSuggestions[suggestionIndex].name);
+                    setUlToggle(false);
+                    return;
                   }
-                  setUToggle(false);
-                  return;
                 }
                 case 'ArrowUp': {
                   if (suggestionIndex > -1) {
