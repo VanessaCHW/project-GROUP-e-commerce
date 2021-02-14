@@ -93,10 +93,33 @@ const getCompanies = (req, res) => {
   });
 };
 
+//Add and get a new array of the searched items
+const addSearchArray = (req, res) => {
+  let newArray = req.body;
+  if (newArray) {
+    res.status(200).json({
+      status: 200,
+      data: newArray,
+      message: 'New Searched Array added',
+    });
+  } else {
+    res.status(404).json({ status: 404, error: `Cannot add searched array` });
+  }
+};
+const getSearchArray = (req, res) => {
+  res.status(200).json({
+    status: 200,
+    data: {},
+    message: 'New Searched Array added',
+  });
+};
+
 module.exports = {
   getProducts,
   getSomeProducts,
   getCategory,
   getProductInfo,
   getCompanies,
+  addSearchArray,
+  getSearchArray,
 };

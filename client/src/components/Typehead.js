@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import uuid from 'uuid';
 
 const Typehead = ({ suggestions }) => {
   const [value, setValue] = React.useState('');
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
+  const [ulToggle, setUToggle] = React.useState(true);
   const history = useHistory();
   const matchedSuggestions =
     value.length > 1
@@ -12,15 +14,27 @@ const Typehead = ({ suggestions }) => {
           suggestion.name.toLowerCase().includes(value.toLowerCase())
         )
       : [];
+  //HANDLERS
   const handleSelect = (suggestion) => {
     // window.alert(suggestion);
     if (Array.isArray(suggestion) && suggestion.length > 1) {
       console.log(suggestion, 'if');
+      fetch('/api/add-search-array', {
+        method: 'POST',
+        body: JSON.stringify({ id: uuid.v4(), suggestions: suggestion }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => console.log(json, 'json'));
     } else {
       history.push(`/product/${suggestion._id}`);
       console.log(suggestion, 'else');
     }
   };
+
   const handleBackToHomepage = () => {
     history.push('/');
   };
@@ -33,16 +47,22 @@ const Typehead = ({ suggestions }) => {
           <input
             type="text"
             value={value}
-            onChange={(ev) => setValue(ev.target.value)}
+            onChange={(ev) => {
+              setValue(ev.target.value);
+              setUToggle(true);
+              return;
+            }}
             onKeyDown={(ev) => {
               switch (ev.key) {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
                     handleSelect(matchedSuggestions);
                     return;
+                  } else {
+                    handleSelect(matchedSuggestions[suggestionIndex]);
+                    setValue(matchedSuggestions[suggestionIndex].name);
                   }
-                  handleSelect(matchedSuggestions[suggestionIndex]);
-                  setValue(matchedSuggestions[suggestionIndex].name);
+                  setUToggle(false);
                   return;
                 }
                 case 'ArrowUp': {
@@ -65,59 +85,63 @@ const Typehead = ({ suggestions }) => {
             Clear
           </button>
         </div>
-        <ul>
-          {matchedSuggestions.map((suggestion, i) => {
-            const slicedIndex = suggestion.name
-              .toLowerCase()
-              .indexOf(value.toLowerCase());
-            //IF sliceIndex === 0
-            const firstPart = suggestion.name.slice(
-              0,
-              slicedIndex + value.length
-            );
-            //IF sliceIndex > 0
-            const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
-            const offFirstPartStartWritten = suggestion.name.slice(
-              slicedIndex,
-              slicedIndex + value.length
-            );
-            //Rest of the suggestion
-            const secondPart = suggestion.name.slice(
-              slicedIndex + value.length
-            );
-            const isSelected =
-              matchedSuggestions.indexOf(suggestion) === suggestionIndex
-                ? true
-                : false;
-            return (
-              <Suggestion
-                key={suggestion._id}
-                onClick={() => handleSelect(suggestion.name)}
-                style={{
-                  background: isSelected
-                    ? 'hsla(50deg, 100%, 80%, 0.25)'
-                    : 'transparent',
-                }}
-                onMouseEnter={() => {
-                  setSuggestionIndex(i);
-                }}
-              >
-                {slicedIndex === 0 ? (
-                  <span className="written-part">{firstPart}</span>
-                ) : (
-                  <>
-                    <span>{offFirstPartStart}</span>
-                    <span className="written-part">
-                      {offFirstPartStartWritten}
-                    </span>
-                  </>
-                )}
-                <span>{secondPart}</span>
-                <span className="item-category">in {suggestion.category}</span>
-              </Suggestion>
-            );
-          })}
-        </ul>
+        {ulToggle && (
+          <ul>
+            {matchedSuggestions.map((suggestion, i) => {
+              const slicedIndex = suggestion.name
+                .toLowerCase()
+                .indexOf(value.toLowerCase());
+              //IF sliceIndex === 0
+              const firstPart = suggestion.name.slice(
+                0,
+                slicedIndex + value.length
+              );
+              //IF sliceIndex > 0
+              const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
+              const offFirstPartStartWritten = suggestion.name.slice(
+                slicedIndex,
+                slicedIndex + value.length
+              );
+              //Rest of the suggestion
+              const secondPart = suggestion.name.slice(
+                slicedIndex + value.length
+              );
+              const isSelected =
+                matchedSuggestions.indexOf(suggestion) === suggestionIndex
+                  ? true
+                  : false;
+              return (
+                <Suggestion
+                  key={suggestion._id}
+                  onClick={() => handleSelect(suggestion.name)}
+                  style={{
+                    background: isSelected
+                      ? 'hsla(50deg, 100%, 80%, 0.25)'
+                      : 'transparent',
+                  }}
+                  onMouseEnter={() => {
+                    setSuggestionIndex(i);
+                  }}
+                >
+                  {slicedIndex === 0 ? (
+                    <span className="written-part">{firstPart}</span>
+                  ) : (
+                    <>
+                      <span>{offFirstPartStart}</span>
+                      <span className="written-part">
+                        {offFirstPartStartWritten}
+                      </span>
+                    </>
+                  )}
+                  <span>{secondPart}</span>
+                  <span className="item-category">
+                    in {suggestion.category}
+                  </span>
+                </Suggestion>
+              );
+            })}
+          </ul>
+        )}
       </div>
       <CartWrapper>
         <CartButton href="/cart">Cart</CartButton>
