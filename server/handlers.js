@@ -3,6 +3,8 @@ const companies = require('./data/companies.json');
 const { v4: uuidv4 } = require('uuid');
 const e = require('express');
 
+let SEARCHED = [];
+
 // Returns all items from the inventory
 const getProducts = (req, res) => {
   /////Get all unqiue categories
@@ -98,24 +100,41 @@ const getCompanies = (req, res) => {
 const addSearchArray = (req, res) => {
   let newArray = req.body;
   const newArrayId = uuidv4();
+  SEARCHED.push(newArrayId);
+  SEARCHED.push(newArray);
+  // let SEARCHED = { id: newArrayId, array: newArray };
 
   if (newArray) {
     res.status(200).json({
       status: 200,
-      id: newArrayId,
-      data: newArray,
+      // id: newArrayId,
+      // data: { array: searchArray, id: newArrayId },
+      data: [SEARCHED],
       message: 'New Searched Array added',
     });
   } else {
     res.status(404).json({ status: 404, error: `Cannot add searched array` });
   }
 };
+
 const getSearchArray = (req, res) => {
-  res.status(200).json({
-    status: 200,
-    data: {},
-    message: 'New Searched Array added',
-  });
+  const searchedId = req.params.searchedId;
+  console.log(searchedId, 'CONSOLE');
+  console.log(SEARCHED[0], 'SEACHED');
+
+  if (SEARCHED !== []) {
+    if (SEARCHED[0] === searchedId) {
+      res.status(200).json({
+        status: 200,
+        data: SEARCHED,
+        message: 'New Searched Array added',
+      });
+    }
+  } else {
+    res
+      .status(404)
+      .json({ status: 404, error: `Cannot find ${searchedId} id` });
+  }
 };
 
 module.exports = {

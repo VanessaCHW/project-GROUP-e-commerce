@@ -30,7 +30,7 @@ const Typehead = ({ suggestions }) => {
         .then((res) => res.json())
         .then((json) => {
           console.log(json, 'json');
-          history.push(`/searched/${json.id}`);
+          history.push(`/searched/${json.data[0][0]}`);
           return;
         });
     } else {

@@ -11,14 +11,27 @@ const Searched = () => {
   const [status, setStatus] = React.useState('loading');
   const [currentPage, setCurrentPage] = React.useState(0);
   const { categoryId } = useParams();
+  const { searchedId } = useParams();
 
   React.useEffect(() => {
-    fetch(`/api/category/${categoryId}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json.data);
-        setStatus('idle');
-      });
+    console.log(searchedId, 'inside useEffecy');
+    if (categoryId) {
+      fetch(`/api/category/${categoryId}`)
+        .then((res) => res.json())
+        .then((json) => {
+          setItems(json.data);
+          setStatus('idle');
+        });
+    } else if (searchedId) {
+      console.log(searchedId, 'inside else if');
+      fetch(`/api/searched/${searchedId}`)
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(json.data[1].suggestions, 'JSON SEARCHED');
+          setItems(json.data[1].suggestions);
+          setStatus('idle');
+        });
+    }
   }, []);
 
   // For pagination links
