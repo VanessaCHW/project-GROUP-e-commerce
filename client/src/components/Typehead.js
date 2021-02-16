@@ -43,6 +43,10 @@ const Typehead = ({ suggestions }) => {
     history.push('/');
   };
 
+  const handleMatchedSuggestions = (suggestions) => {
+    handleSelect(suggestions);
+  };
+
   return (
     <Wrapper>
       <Logo onClick={handleBackToHomepage}>LOGO</Logo>
@@ -60,15 +64,17 @@ const Typehead = ({ suggestions }) => {
               switch (ev.key) {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
-                    handleSelect(matchedSuggestions);
-                    setUlToggle(false);
-                    return;
+                    handleMatchedSuggestions(matchedSuggestions);
+                    // setUlToggle(false);
+                    // return;
                   } else {
                     handleSelect(matchedSuggestions[suggestionIndex]);
                     setValue(matchedSuggestions[suggestionIndex].name);
-                    setUlToggle(false);
-                    return;
+                    // setUlToggle(false);
+                    // return;
                   }
+                  setUlToggle(false);
+                  return;
                 }
                 case 'ArrowUp': {
                   if (suggestionIndex > -1) {
@@ -86,8 +92,12 @@ const Typehead = ({ suggestions }) => {
               }
             }}
           />
-          <button className="clearBtn" onClick={() => setValue('')}>
-            Clear
+          {/* <button className="clearBtn" onClick={() => setValue('')}> */}
+          <button
+            className="searchBtn"
+            onClick={() => handleMatchedSuggestions(matchedSuggestions)}
+          >
+            Search ALL
           </button>
         </div>
         {ulToggle && (
@@ -115,10 +125,14 @@ const Typehead = ({ suggestions }) => {
                 matchedSuggestions.indexOf(suggestion) === suggestionIndex
                   ? true
                   : false;
+
               return (
                 <Suggestion
                   key={suggestion._id}
-                  onClick={() => handleSelect(suggestion.name)}
+                  // onClick={() => handleSelect(suggestion.name)}
+                  onClick={() =>
+                    handleSelect(matchedSuggestions[suggestionIndex])
+                  }
                   style={{
                     background: isSelected
                       ? 'hsla(50deg, 100%, 80%, 0.25)'
@@ -181,7 +195,8 @@ const Wrapper = styled.div`
         outline: none;
       }
     }
-    .clearBtn {
+    .searchBtn {
+      width: 12%;
     }
     ul {
       width: 100%;

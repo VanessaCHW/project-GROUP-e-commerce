@@ -12,17 +12,20 @@ const Searched = () => {
   const [currentPage, setCurrentPage] = React.useState(0);
   const { categoryId } = useParams();
   const { searchedId } = useParams();
+  const [toggle, setToggle] = React.useState(true);
 
   React.useEffect(() => {
     console.log(searchedId, 'inside useEffecy');
-    if (categoryId) {
+    if (categoryId && toggle) {
       fetch(`/api/category/${categoryId}`)
         .then((res) => res.json())
         .then((json) => {
           setItems(json.data);
           setStatus('idle');
         });
-    } else if (searchedId) {
+    }
+    if (searchedId) {
+      setToggle(false);
       console.log(searchedId, 'inside else if');
       fetch(`/api/searched/${searchedId}`)
         .then((res) => res.json())
@@ -32,7 +35,7 @@ const Searched = () => {
           setStatus('idle');
         });
     }
-  }, []);
+  }, [searchedId]);
 
   // For pagination links
   function handlePageClick({ selected: selectedPage }) {
@@ -48,6 +51,7 @@ const Searched = () => {
     const offset = currentPage * itemsPerPage;
     const data = items.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(items.length / itemsPerPage);
+    console.log(items, 'ITEMS');
     return (
       <Wrapper>
         <div className="___filterExample">FILTER BOX</div>{' '}
