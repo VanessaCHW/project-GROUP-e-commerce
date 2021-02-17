@@ -18,7 +18,7 @@ const Typehead = ({ suggestions }) => {
   const handleSelect = (suggestion) => {
     // window.alert(suggestion);
     if (Array.isArray(suggestion) && suggestion.length > 1) {
-      console.log(suggestion, 'if');
+      // console.log(suggestion, 'if');
       fetch('/api/add-search-array', {
         method: 'POST',
         body: JSON.stringify({ suggestions: suggestion }),
@@ -29,7 +29,7 @@ const Typehead = ({ suggestions }) => {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json, 'json');
+          // console.log(json, 'json');
           history.push(`/searched/${json.data[0][0]}`);
           return;
         });

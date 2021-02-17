@@ -100,9 +100,18 @@ const getCompanies = (req, res) => {
 const addSearchArray = (req, res) => {
   let newArray = req.body;
   const newArrayId = uuidv4();
-  SEARCHED.push(newArrayId);
-  SEARCHED.push(newArray);
-  // let SEARCHED = { id: newArrayId, array: newArray };
+  // SEARCHED.push(newArrayId);
+  // SEARCHED.push(newArray);
+  console.log(SEARCHED, 'SEARCHED');
+  if (SEARCHED.length > 1) {
+    SEARCHED = [];
+    SEARCHED.push(newArrayId);
+    SEARCHED.push(newArray);
+    console.log(SEARCHED, 'SEARCHED inside IF');
+  } else {
+    SEARCHED.push(newArrayId);
+    SEARCHED.push(newArray);
+  }
 
   if (newArray) {
     res.status(200).json({

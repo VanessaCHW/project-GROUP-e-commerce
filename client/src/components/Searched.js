@@ -12,11 +12,10 @@ const Searched = () => {
   const [currentPage, setCurrentPage] = React.useState(0);
   const { categoryId } = useParams();
   const { searchedId } = useParams();
-  const [toggle, setToggle] = React.useState(true);
 
   React.useEffect(() => {
-    console.log(searchedId, 'inside useEffecy');
-    if (categoryId && toggle) {
+    // console.log(searchedId, 'inside useEffecy');
+    if (categoryId) {
       fetch(`/api/category/${categoryId}`)
         .then((res) => res.json())
         .then((json) => {
@@ -25,12 +24,11 @@ const Searched = () => {
         });
     }
     if (searchedId) {
-      setToggle(false);
-      console.log(searchedId, 'inside else if');
+      // console.log(searchedId, 'inside else if');
       fetch(`/api/searched/${searchedId}`)
         .then((res) => res.json())
         .then((json) => {
-          console.log(json.data[1].suggestions, 'JSON SEARCHED');
+          // console.log(json.data[1].suggestions, 'JSON SEARCHED');
           setItems(json.data[1].suggestions);
           setStatus('idle');
         });
