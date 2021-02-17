@@ -7,6 +7,7 @@ const NavBar = () => {
       <Nav>
         {/* TODO: Add the rest of the categories */}
         <a href="/category/fitness">Fitness</a>
+        <a href="/category/fitness">Fitness</a>
       </Nav>
     </Wrapper>
   );
