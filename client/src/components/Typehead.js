@@ -123,7 +123,7 @@ const Typehead = ({ suggestions }) => {
 const Wrapper = styled.div`
   border: solid 2px red;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   /* align-items: center; */
   /* flex-direction: column; */
   padding: 10px 0;
@@ -162,7 +162,7 @@ const Logo = styled.div`
   border: solid 2px green;
   /* align-self: flex-start;
   justify-self: flex-start; */
-  position: absolute;
+  
   top: 10%;
   bottom: 10%;
   left: 10px;
@@ -185,7 +185,7 @@ const CartWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   position: relative;
-  left: 400px;
+  
 `;
 
 const CartButton = styled.a`

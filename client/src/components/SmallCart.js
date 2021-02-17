@@ -46,6 +46,8 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   border: solid 2px black;
+  position: sticky;
+        top: 0;
 `;
 
 const Div = styled.div`

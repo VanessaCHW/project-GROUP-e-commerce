@@ -80,7 +80,7 @@ const Wrapper = styled.div`
   border: solid blue 2px;
   height: 90%;
   display: flex;
-  height: 100vh;
+  height: 100%;
 
   .___filterExample {
     border: solid red 2px;
