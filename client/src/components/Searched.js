@@ -13,29 +13,29 @@ const Searched = () => {
   const [currentPage, setCurrentPage] = React.useState(0); //Pagination state
   const [filteredItems, setFilteredItems] = React.useState(null); // Copy of "items" to be filtered
   const { categoryId } = useParams();
-  // console.log(categoryId, 'categoryId');
-  if (status === 'idle') {
-    // console.log(items.length, 'LENGTH');
-  }
-
-  // React.useEffect(() => {
-  //   fetch('/api/someproducts')
-  //     .then((res) => res.json())
-  //     .then((json) => {
-  //       setItems(json.data);
-  //       setStatus('idle');
-  //     });
-  // }, []);
+  const { searchedId } = useParams();
 
   React.useEffect(() => {
-    fetch(`/api/category/${categoryId}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json.data);
-        setFilteredItems(json.data);
-        setStatus('idle');
-      });
-  }, []);
+    // console.log(searchedId, 'inside useEffecy');
+    if (categoryId) {
+      fetch(`/api/category/${categoryId}`)
+        .then((res) => res.json())
+        .then((json) => {
+          setItems(json.data);
+          setStatus('idle');
+        });
+    }
+    if (searchedId) {
+      // console.log(searchedId, 'inside else if');
+      fetch(`/api/searched/${searchedId}`)
+        .then((res) => res.json())
+        .then((json) => {
+          // console.log(json.data[1].suggestions, 'JSON SEARCHED');
+          setItems(json.data[1].suggestions);
+          setStatus('idle');
+        });
+    }
+  }, [searchedId]);
 
   // For pagination links
   function handlePageClick({ selected: selectedPage }) {
@@ -51,6 +51,7 @@ const Searched = () => {
     const offset = currentPage * itemsPerPage;
     const data = filteredItems.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(filteredItems.length / itemsPerPage);
+    console.log(items, 'ITEMS');
     return (
       <Wrapper>
         <FilterBox
