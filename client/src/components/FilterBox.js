@@ -8,8 +8,12 @@ const FilterBox = ({
   originalArray,
   setCurrentPage,
 }) => {
-  const [compFilters, setCompFilters] = useState([]); //Stores the filters for companies
-  const [priceFilters, setPriceFilters] = useState([]); //Stores filters for price range
+  /**TO DO: combine all states in a single one */
+  /**TO DO: sort items after filtering */
+  /**TO DO: correct bug when all options are checked */
+  const [compFilters, setCompFilters] = useState([]);
+  const [priceFilters, setPriceFilters] = useState([]);
+  const [stockFilter, setStockFilter] = useState(null);
   const { companies } = useContext(ProductsContext);
   const priceRanges = [
     { text: 'Under $25', value: 'under25' },
@@ -101,50 +105,109 @@ const FilterBox = ({
     let ids = getAllCompanyId();
     let temp = [];
     //Create objects of company name/id
-    companies.forEach((company) => {
-      if (ids.includes(company._id)) {
-        temp.push({ id: company._id, name: company.name });
-      }
-    });
-
+    if (companies) {
+      companies.forEach((company) => {
+        if (ids.includes(company._id)) {
+          temp.push({ id: company._id, name: company.name });
+        }
+      });
+    }
     return temp;
   };
 
-  let companyData = getCompanyData(); //For showing all companies in box
+  //For showing all companies in box
+  let companyData = getCompanyData();
 
-  // Update the companies filters lists
-  // when a company is checked/unchecked
-  const handleCompanyInput = (id) => {
-    //Add or remove filter criteria
-    if (document.getElementById(id).checked === false) {
-      let temp = [...compFilters];
-      temp.splice(temp.indexOf(id), 1);
-      setCompFilters(temp);
+  // Add/removes filters to the corresponding state
+  // gets called every time a filter is checked/unchecked
+  const handleInput = (id, state, setState) => {
+    if (document.getElementById(id).checked) {
+      setState([...state, id]);
+      console.log(state);
     } else {
-      setCompFilters([...compFilters, id]);
+      let temp = [...state];
+      temp.splice(temp.indexOf(id), 1);
+      setState(temp);
     }
   };
 
-  const handlePriceInput = (range) => {
-    console.log(range);
+  //Finding corresponding items
+  const filterByBrand = () => {
+    if (compFilters.length === 0) {
+      setFilteredItems(originalArray);
+    } else {
+      let temp = [];
+      if (compFilters.length > 0) {
+        compFilters.map((criteria) => {
+          let resultForCriteria = originalArray.filter(
+            (item) => item.companyId === parseInt(criteria)
+          );
+          temp = [...temp, ...resultForCriteria];
+        });
+        setFilteredItems(temp);
+      }
+    }
+    return filteredItems;
+  };
+
+  //Finding corresponding items
+  const filterByPrice = (data) => {
+    //Helper function
+    const getItemsByRange = (data, start, end) => {
+      let temp = data.filter(
+        (item) =>
+          item.price.slice(1).replace(',', '') > start &&
+          item.price.slice(1).replace(',', '') < end
+      );
+      return temp;
+    };
+
+    if (priceFilters.length > 0) {
+      let temp = [];
+      priceFilters.map((range) => {
+        switch (range) {
+          case 'under25':
+            temp = [...temp, ...getItemsByRange(data, 0, 25)];
+            break;
+          case '25to50':
+            temp = [...temp, ...getItemsByRange(data, 25, 50)];
+            break;
+          case '50to100':
+            temp = [...temp, ...getItemsByRange(data, 50, 100)];
+            break;
+          case '100to200':
+            temp = [...temp, ...getItemsByRange(data, 100, 200)];
+            break;
+          case '200nup':
+            temp = [...temp, ...getItemsByRange(data, 200, 10000)];
+          default:
+            break;
+        }
+      });
+      setFilteredItems(temp);
+    }
+    return filteredItems;
+  };
+
+  const filterByStock = (data) => {
+    console.log('yo');
+    console.log(stockFilter);
+    if (stockFilter === 'nostock') {
+      setFilteredItems([...data.filter((item) => item.numInStock === 0)]);
+      return filteredItems;
+    } else if (stockFilter === 'instock') {
+      setFilteredItems([...data.filter((item) => item.numInStock > 0)]);
+      return filteredItems;
+    } else {
+      return data;
+    }
   };
 
   //Update the item list when any filters states are changed
   useEffect(() => {
-    if (compFilters.length === 0) {
-      setFilteredItems(originalArray);
-    } else if (compFilters.length > 0) {
-      let temp = [];
-      compFilters.map((criteria) => {
-        let resultForCriteria = originalArray.filter(
-          (item) => item.companyId === parseInt(criteria)
-        );
-        temp = [...temp, ...resultForCriteria];
-      });
-      setFilteredItems(temp);
-    }
+    filterByStock(filterByPrice(filterByBrand()));
     setCurrentPage(0);
-  }, [compFilters]);
+  }, [compFilters, priceFilters, stockFilter]);
 
   return (
     <Wrapper>
@@ -161,11 +224,12 @@ const FilterBox = ({
               <>
                 <label>
                   <input
-                    key={company.id}
                     type="checkbox"
                     id={company.id}
                     value={company.id}
-                    onChange={(ev) => handleCompanyInput(ev.target.value)}
+                    onChange={(ev) =>
+                      handleInput(ev.target.value, compFilters, setCompFilters)
+                    }
                   />
                   {company.name}
                 </label>
@@ -184,7 +248,13 @@ const FilterBox = ({
                     type="checkbox"
                     id={priceRange.value}
                     value={priceRange.value}
-                    onChange={(ev) => handlePriceInput(ev.target.value)}
+                    onChange={(ev) =>
+                      handleInput(
+                        ev.target.value,
+                        priceFilters,
+                        setPriceFilters
+                      )
+                    }
                   />
                   {priceRange.text}
                 </label>
@@ -195,11 +265,35 @@ const FilterBox = ({
         </div>
         <div className="stockSection">
           <div className="sectionTitle">Availability</div>
-          <input type="checkbox" id="instock" name="instock" value="instock" />
-          <label>In stock</label>
+          <label>
+            <input
+              type="checkbox"
+              id="instock"
+              name="instock"
+              value="instock"
+              onChange={(ev) => {
+                ev.target.checked
+                  ? setStockFilter('instock')
+                  : setStockFilter(null);
+              }}
+            />
+            In stock
+          </label>
           <br />
-          <input type="checkbox" id="nostock" name="nostock" value="nostock" />
-          <label>Out of stock</label>
+          <label>
+            <input
+              type="checkbox"
+              id="nostock"
+              name="nostock"
+              value="nostock"
+              onChange={(ev) => {
+                ev.target.checked
+                  ? setStockFilter('nostock')
+                  : setStockFilter(null);
+              }}
+            />
+            Out of stock
+          </label>
           <br />
         </div>
       </form>

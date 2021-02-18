@@ -22,6 +22,7 @@ const Searched = () => {
         .then((res) => res.json())
         .then((json) => {
           setItems(json.data);
+          setFilteredItems(json.data);
           setStatus('idle');
         });
     }
@@ -32,6 +33,7 @@ const Searched = () => {
         .then((json) => {
           // console.log(json.data[1].suggestions, 'JSON SEARCHED');
           setItems(json.data[1].suggestions);
+          setFilteredItems(json.data[1].suggestions);
           setStatus('idle');
         });
     }
@@ -51,7 +53,7 @@ const Searched = () => {
     const offset = currentPage * itemsPerPage;
     const data = filteredItems.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(filteredItems.length / itemsPerPage);
-    console.log(items, 'ITEMS');
+    //console.log(items, 'ITEMS');
     return (
       <Wrapper>
         <FilterBox
