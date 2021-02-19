@@ -9,6 +9,8 @@ const {
   getProductInfo,
   getCategory,
   getCompanies,
+  addSearchArray,
+  getSearchArray,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -39,6 +41,8 @@ express()
   .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
   .get('/api/companies', getCompanies)
+  .post('/api/add-search-array', addSearchArray)
+  .get('/api/searched/:searchedId', getSearchArray)
 
   // Catch all endpoint
   .get('*', (req, res) =>

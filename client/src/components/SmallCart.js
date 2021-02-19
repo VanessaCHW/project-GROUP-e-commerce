@@ -84,7 +84,7 @@ const SmallCartQuantity = styled.p``;
 const SmallCartDiv = styled(Link)`
   display: flex;
   padding: 10px;
-  width: 320px;
+  width: 310px;
   text-decoration: none;
   /* margin: 5px; */
 `;
