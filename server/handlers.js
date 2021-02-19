@@ -7,8 +7,16 @@ let SEARCHED = [];
 
 // Returns all items from the inventory
 const getProducts = (req, res) => {
-  /////Get all unqiue categories
+  res.status(200).json({
+    status: 200,
+    message: 'Request for all items fulfilled',
+    data: { ...items },
+  });
+};
 
+//Return all unique categories
+const getAllUniqueCategories = (req, res) => {
+  /////Get all unqiue categories
   // const newArr = [];
   // items.some((item) => {
   //   if (newArr.includes(item.category)) {
@@ -20,16 +28,21 @@ const getProducts = (req, res) => {
   // console.log(newArr, 'UNIQUE CATEGORY');
 
   /////Simpler way to get all unique categories
-
-  // const uniqueSet = new Set(items.map((item) => item.category));
-  // const uniqueArr = [...uniqueSet];
-  // console.log(uniqueArr, 'UNIQUE CATEGORY');
-
-  res.status(200).json({
-    status: 200,
-    message: 'Request for all items fulfilled',
-    data: { ...items },
-  });
+  const uniqueSet = new Set(items.map((item) => item.category));
+  const uniqueArr = [...uniqueSet];
+  console.log(uniqueArr, 'UNIQUE CATEGORY');
+  if (uniqueArr) {
+    res.status(200).json({
+      status: 200,
+      message: `Request for all unique categories fulfilled`,
+      data: uniqueArr,
+    });
+  } else {
+    res.status(404).json({
+      status: 404,
+      message: `${uniqueArr} not found`,
+    });
+  }
 };
 
 //Returns the first 8 items from the inventory
@@ -148,6 +161,7 @@ const getSearchArray = (req, res) => {
 
 module.exports = {
   getProducts,
+  getAllUniqueCategories,
   getSomeProducts,
   getCategory,
   getProductInfo,
