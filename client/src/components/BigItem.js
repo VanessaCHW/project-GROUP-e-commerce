@@ -2,8 +2,10 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
+import { useDispatch } from 'react-redux'
+import { addItem } from './action'
 
 const BigItem = () => {
   let currentID = useParams().id;
@@ -11,6 +13,8 @@ const BigItem = () => {
   const { companies } = useContext(ProductsContext); //array of all companies
   const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
   const [quantityBox, setQuantityBox] = useState(0);
+  const dispatch = useDispatch();
+
 
   // Use the product ID to fetch all product data
   useEffect(() => {
@@ -23,7 +27,7 @@ const BigItem = () => {
         console.error('Unable to retrieve product details', error);
       });
   }, [currentID]);
-
+console.log(currentID,"Bbbbbbbbbbb")
   // Determine the vendor name by using a filter.
   // Using a hook for now because 'item' and 'companies' take time to load.
   useEffect(() => {
@@ -33,6 +37,18 @@ const BigItem = () => {
     }
   }, [item, companies]);
 
+
+  const addQuantity = (quantity) => {
+    setQuantityBox(quantity)
+    console.log(Quantity,"Aaaaaaaaa")
+  }
+
+  const addToCart = (item) => {
+    console.log(item,"XXXXXXXXXXX")
+    const action = addItem(item)
+    console.log(action,"XAction")
+    dispatch(action)
+  }
   if (item && vendor) {
     return (
       <Wrapper>
@@ -42,7 +58,7 @@ const BigItem = () => {
           </ImgContainer>
           <InfoBox>
             <Name>{item.name}</Name>
-            <Vendor target="_blank" href={vendor.url}>
+            <Vendor target="_blank" to={vendor.url}>
               Visit the {vendor.name} website
             </Vendor>
             <hr />
@@ -58,7 +74,7 @@ const BigItem = () => {
             )}
             <QuantityButtons>
               <button
-                onClick={() => setQuantityBox(quantityBox - 1)}
+                onClick={() => addQuantity(quantityBox - 1)}
                 disabled={
                   item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
                 }
@@ -67,16 +83,16 @@ const BigItem = () => {
               </button>
               <Quantity
                 value={quantityBox}
-                onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
+                onChange={(ev) => addQuantity(parseInt(ev.target.value))}
               />
               <button
-                onClick={() => setQuantityBox(quantityBox + 1)}
+                onClick={() => addQuantity(quantityBox + 1)}
                 disabled={item.numInStock > 0 ? false : true}
               >
                 +
               </button>
             </QuantityButtons>
-            <Button disabled={item.numInStock > 0 ? false : true}>
+            <Button onClick={() => addToCart(item)} >
               ADD TO CART
             </Button>
           </InfoBox>
@@ -132,7 +148,7 @@ const Name = styled.div`
   line-height: 2rem;
   margin-bottom: 10px;
 `;
-const Vendor = styled.a`
+const Vendor = styled(Link)`
   text-decoration: none;
   color: #629d9d;
   &:hover {
