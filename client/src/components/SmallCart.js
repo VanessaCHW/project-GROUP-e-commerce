@@ -46,6 +46,8 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   border: solid 2px black;
+  position: sticky;
+        top: 0;
 `;
 
 const Div = styled.div`
@@ -82,7 +84,7 @@ const SmallCartQuantity = styled.p``;
 const SmallCartDiv = styled(Link)`
   display: flex;
   padding: 10px;
-  width: 320px;
+  width: 310px;
   text-decoration: none;
   /* margin: 5px; */
 `;
