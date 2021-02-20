@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import uuid from 'uuid';
 
 const Typehead = ({ suggestions }) => {
@@ -163,7 +163,7 @@ const Typehead = ({ suggestions }) => {
         )}
       </div>
       <CartWrapper>
-        <CartButton href="/cart">Cart</CartButton>
+        <CartButton to="/cart">Cart</CartButton>
       </CartWrapper>
     </Wrapper>
   );
@@ -238,7 +238,7 @@ const CartWrapper = styled.div`
   
 `;
 
-const CartButton = styled.a`
+const CartButton = styled(Link)`
   border: 2px solid black;
   text-decoration: none;
   text-align: center;
