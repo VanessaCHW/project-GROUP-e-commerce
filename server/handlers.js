@@ -3,7 +3,7 @@ const companies = require('./data/companies.json');
 const { v4: uuidv4 } = require('uuid');
 const e = require('express');
 
-let SEARCHED = [];
+// let SEARCHED = [];
 
 // Returns all items from the inventory
 const getProducts = (req, res) => {
@@ -30,7 +30,7 @@ const getAllUniqueCategories = (req, res) => {
   /////Simpler way to get all unique categories
   const uniqueSet = new Set(items.map((item) => item.category));
   const uniqueArr = [...uniqueSet];
-  console.log(uniqueArr, 'UNIQUE CATEGORY');
+  // console.log(uniqueArr, 'UNIQUE CATEGORY');
   if (uniqueArr) {
     res.status(200).json({
       status: 200,
@@ -58,7 +58,7 @@ const getSomeProducts = (req, res) => {
 const getCategory = (req, res) => {
   //Get the category from the url ('/api/category/:category)
   const itemCategory = req.params.categoryId;
-  console.log(itemCategory.split('-').join('').toLowerCase());
+  // console.log(itemCategory.split('-').join('').toLowerCase());
 
   //Check if the category exist first, if not, send an error
   if (
@@ -110,28 +110,30 @@ const getCompanies = (req, res) => {
 };
 
 //Add and get a new array of the searched items
-const addSearchArray = (req, res) => {
+const getProductSearch = (req, res) => {
   let newArray = req.body;
   const newArrayId = uuidv4();
   // SEARCHED.push(newArrayId);
   // SEARCHED.push(newArray);
-  console.log(SEARCHED, 'SEARCHED');
-  if (SEARCHED.length > 1) {
-    SEARCHED = [];
-    SEARCHED.push(newArrayId);
-    SEARCHED.push(newArray);
-    console.log(SEARCHED, 'SEARCHED inside IF');
-  } else {
-    SEARCHED.push(newArrayId);
-    SEARCHED.push(newArray);
-  }
+  // console.log(SEARCHED, 'SEARCHED');
+  // if (SEARCHED.length > 1) {
+  //   SEARCHED.push(newArrayId);
+  //   SEARCHED.push(newArray);
+  // } else {
+  //   SEARCHED.push(newArrayId);
+  //   SEARCHED.push(newArray);
+  // }
+  // SEARCHED.push(newArrayId);
+  // SEARCHED.push(newArray);
+  // console.log(newArray, 'SEARCHED');
 
   if (newArray) {
     res.status(200).json({
       status: 200,
       // id: newArrayId,
       // data: { array: searchArray, id: newArrayId },
-      data: [SEARCHED],
+      id: newArrayId,
+      data: [newArray],
       message: 'New Searched Array added',
     });
   } else {
@@ -141,21 +143,43 @@ const addSearchArray = (req, res) => {
 
 const getSearchArray = (req, res) => {
   const searchedId = req.params.searchedId;
-  console.log(searchedId, 'CONSOLE');
-  console.log(SEARCHED[0], 'SEACHED');
+  // console.log(searchedId, 'CONSOLE');
+  // console.log(SEARCHED[0], 'SEACHED');
 
-  if (SEARCHED !== []) {
-    if (SEARCHED[0] === searchedId) {
-      res.status(200).json({
-        status: 200,
-        data: SEARCHED,
-        message: 'New Searched Array added',
-      });
-    }
+  // if (SEARCHED !== []) {
+  //   if (SEARCHED[0] === searchedId) {
+  res.status(200).json({
+    status: 200,
+    data: 'DATA',
+    message: 'New Searched Array added',
+  });
+  //   }
+  // } else {
+  // res
+  //   .status(404)
+  //   .json({ status: 404, error: `Cannot find ${searchedId} id` });
+  // }
+};
+
+const getTypehead = (req, res) => {
+  const typeheadValue = req.params.typeheadValue;
+  console.log(typeheadValue, 'TYPEHEAD');
+
+  //Search for products with the typeheadValue
+  const matchedSuggestions = items.filter((item) => {
+    return item.name.toLowerCase().includes(typeheadValue.toLowerCase());
+  });
+  if (matchedSuggestions) {
+    res.status(200).json({
+      status: 200,
+      data: matchedSuggestions,
+      message: 'Received data from typehead',
+    });
   } else {
-    res
-      .status(404)
-      .json({ status: 404, error: `Cannot find ${searchedId} id` });
+    res.status(404).json({
+      status: 404,
+      error: `No match for ${typeheadValue}`,
+    });
   }
 };
 
@@ -166,6 +190,7 @@ module.exports = {
   getCategory,
   getProductInfo,
   getCompanies,
-  addSearchArray,
+  getProductSearch,
   getSearchArray,
+  getTypehead,
 };

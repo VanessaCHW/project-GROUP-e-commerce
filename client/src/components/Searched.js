@@ -28,12 +28,17 @@ const Searched = () => {
     }
     if (searchedId) {
       // console.log(searchedId, 'inside else if');
-      fetch(`/api/searched/${searchedId}`)
+      fetch(`/api/products/search`, {
+        method: 'POST',
+        body: JSON,
+      })
         .then((res) => res.json())
         .then((json) => {
           // console.log(json.data[1].suggestions, 'JSON SEARCHED');
-          setItems(json.data[1].suggestions);
-          setFilteredItems(json.data[1].suggestions);
+          // setItems(json.data[1].suggestions);
+          // setFilteredItems(json.data[1].suggestions);
+          console.log(json, 'JSON INSIDE POST');
+          setItems(json.data);
           setStatus('idle');
         });
     }

@@ -10,8 +10,9 @@ const {
   getProductInfo,
   getCategory,
   getCompanies,
-  addSearchArray,
+  getProductSearch,
   getSearchArray,
+  getTypehead,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -43,9 +44,10 @@ express()
   .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
   .get('/api/companies', getCompanies)
-  .post('/api/add-search-array', addSearchArray)
+  .post('/api/products/search', getProductSearch)
   .get('/api/searched/:searchedId', getSearchArray)
 
+  .get('/api/typehead/:typeheadValue', getTypehead)
   // .get('/api/productsByIds', getProductsByIds)
   //products?size=50
   //productBySearchTerm?searchTerm=:value

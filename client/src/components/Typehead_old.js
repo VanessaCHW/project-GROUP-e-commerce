@@ -3,37 +3,23 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import uuid from 'uuid';
 
-const Typehead = () => {
-  const [status, setStatus] = React.useState('loading');
+const Typehead = ({ suggestions }) => {
   const [value, setValue] = React.useState('');
-  const [suggestions, setSuggestions] = React.useState(null);
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
   const [ulToggle, setUlToggle] = React.useState(true);
   const history = useHistory();
-
-  React.useEffect(() => {
-    if (value.length >= 2) {
-      console.log('useEffect after IF');
-      fetch(`/api/typehead/${value}`)
-        .then((res) => res.json())
-        .then((json) => {
-          console.log(json, 'JSON inside typehead fetch');
-          setSuggestions(json.data);
-          setStatus('idle');
-        });
-    }
-  }, [value]);
-
+  const matchedSuggestions =
+    value.length > 1
+      ? suggestions.filter((suggestion) =>
+          suggestion.name.toLowerCase().includes(value.toLowerCase())
+        )
+      : [];
   //HANDLERS
-  const handleBackToHomepage = () => {
-    history.push('/');
-  };
-
   const handleSelect = (suggestion) => {
     // window.alert(suggestion);
     if (Array.isArray(suggestion) && suggestion.length > 1) {
       // console.log(suggestion, 'if');
-      fetch('/api/products/search', {
+      fetch('/api/add-search-array', {
         method: 'POST',
         body: JSON.stringify({ suggestions: suggestion }),
         headers: {
@@ -43,8 +29,8 @@ const Typehead = () => {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json, 'json');
-          history.push(`/searched/${json.id}`);
+          // console.log(json, 'json');
+          history.push(`/searched/${json.data[0][0]}`);
           return;
         });
     } else {
@@ -53,9 +39,14 @@ const Typehead = () => {
     }
   };
 
-  // if (status === 'idle') {
-  //   console.log(suggestions, 'VALUE');
-  // }
+  const handleBackToHomepage = () => {
+    history.push('/');
+  };
+
+  const handleMatchedSuggestions = (suggestions) => {
+    handleSelect(suggestions);
+  };
+
   return (
     <Wrapper>
       <Logo onClick={handleBackToHomepage}>LOGO</Logo>
@@ -73,12 +64,12 @@ const Typehead = () => {
               switch (ev.key) {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
-                    // handleMatchedSuggestions(matchedSuggestions);
+                    handleMatchedSuggestions(matchedSuggestions);
                     // setUlToggle(false);
                     // return;
                   } else {
-                    // handleSelect(matchedSuggestions[suggestionIndex]);
-                    // setValue(matchedSuggestions[suggestionIndex].name);
+                    handleSelect(matchedSuggestions[suggestionIndex]);
+                    setValue(matchedSuggestions[suggestionIndex].name);
                     // setUlToggle(false);
                     // return;
                   }
@@ -93,7 +84,7 @@ const Typehead = () => {
                 }
                 case 'ArrowDown':
                   {
-                    if (suggestions.length - 1 > suggestionIndex) {
+                    if (matchedSuggestions.length - 1 > suggestionIndex) {
                       setSuggestionIndex(suggestionIndex + 1);
                     }
                   }
@@ -104,14 +95,14 @@ const Typehead = () => {
           {/* <button className="clearBtn" onClick={() => setValue('')}> */}
           <button
             className="searchBtn"
-            onClick={() => handleSelect(suggestions)}
+            onClick={() => handleMatchedSuggestions(matchedSuggestions)}
           >
             Search ALL
           </button>
         </div>
-        {ulToggle && suggestions && (
+        {ulToggle && (
           <ul>
-            {suggestions.map((suggestion, i) => {
+            {matchedSuggestions.map((suggestion, i) => {
               const slicedIndex = suggestion.name
                 .toLowerCase()
                 .indexOf(value.toLowerCase());
@@ -131,7 +122,7 @@ const Typehead = () => {
                 slicedIndex + value.length
               );
               const isSelected =
-                suggestions.indexOf(suggestion) === suggestionIndex
+                matchedSuggestions.indexOf(suggestion) === suggestionIndex
                   ? true
                   : false;
 
@@ -139,7 +130,9 @@ const Typehead = () => {
                 <Suggestion
                   key={suggestion._id}
                   // onClick={() => handleSelect(suggestion.name)}
-                  onClick={() => handleSelect(suggestions[suggestionIndex])}
+                  onClick={() =>
+                    handleSelect(matchedSuggestions[suggestionIndex])
+                  }
                   style={{
                     background: isSelected
                       ? 'hsla(50deg, 100%, 80%, 0.25)'

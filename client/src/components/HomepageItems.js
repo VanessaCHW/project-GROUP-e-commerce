@@ -11,7 +11,7 @@ const HomepageItems = ({ category }) => {
       fetch(`/api/category/${newCategory}`)
         .then((res) => res.json())
         .then((json) => {
-          console.log(json, 'json');
+          // console.log(json, 'json');
           setProducts(json.data);
           setStatus('idle');
         });
@@ -19,7 +19,7 @@ const HomepageItems = ({ category }) => {
       fetch(`/api/category/${category}`)
         .then((res) => res.json())
         .then((json) => {
-          console.log(json, 'json');
+          // console.log(json, 'json');
           setProducts(json.data);
           setStatus('idle');
         });
