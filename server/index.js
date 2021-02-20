@@ -44,10 +44,8 @@ express()
   .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
   .get('/api/companies', getCompanies)
-  .post('/api/products/search', getProductSearch)
-  .get('/api/searched/:searchedId', getSearchArray)
+  .get('/api/search/:keyword', getProductSearch)
 
-  .get('/api/typehead/:typeheadValue', getTypehead)
   // .get('/api/productsByIds', getProductsByIds)
   //products?size=50
   //productBySearchTerm?searchTerm=:value

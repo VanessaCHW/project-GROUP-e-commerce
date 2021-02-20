@@ -1,56 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
-import uuid from 'uuid';
+import { SearchContext } from './SearchContext';
 
 const Typehead = () => {
   const [status, setStatus] = React.useState('loading');
-  const [value, setValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
   const [suggestions, setSuggestions] = React.useState(null);
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
   const [ulToggle, setUlToggle] = React.useState(true);
   const history = useHistory();
-
-  React.useEffect(() => {
-    if (value.length >= 2) {
-      console.log('useEffect after IF');
-      fetch(`/api/typehead/${value}`)
-        .then((res) => res.json())
-        .then((json) => {
-          console.log(json, 'JSON inside typehead fetch');
-          setSuggestions(json.data);
-          setStatus('idle');
-        });
-    }
-  }, [value]);
+  const {
+    actions: { searchByKeyword },
+  } = React.useContext(SearchContext);
 
   //HANDLERS
   const handleBackToHomepage = () => {
     history.push('/');
   };
 
-  const handleSelect = (suggestion) => {
-    // window.alert(suggestion);
-    if (Array.isArray(suggestion) && suggestion.length > 1) {
-      // console.log(suggestion, 'if');
-      fetch('/api/products/search', {
-        method: 'POST',
-        body: JSON.stringify({ suggestions: suggestion }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          console.log(json, 'json');
-          history.push(`/searched/${json.id}`);
-          return;
-        });
-    } else {
-      history.push(`/product/${suggestion._id}`);
-      console.log(suggestion, 'else');
-    }
+  const handleSearch = () => {
+    searchByKeyword(searchValue);
+    history.push('/searched');
   };
 
   // if (status === 'idle') {
@@ -63,16 +34,16 @@ const Typehead = () => {
         <div className="inputContainer">
           <input
             type="text"
-            value={value}
+            value={searchValue}
             onChange={(ev) => {
-              setValue(ev.target.value);
+              setSearchValue(ev.target.value);
               setUlToggle(true);
-              return;
             }}
             onKeyDown={(ev) => {
               switch (ev.key) {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
+                    handleSearch(searchValue);
                     // handleMatchedSuggestions(matchedSuggestions);
                     // setUlToggle(false);
                     // return;
@@ -102,10 +73,7 @@ const Typehead = () => {
             }}
           />
           {/* <button className="clearBtn" onClick={() => setValue('')}> */}
-          <button
-            className="searchBtn"
-            onClick={() => handleSelect(suggestions)}
-          >
+          <button className="searchBtn" onClick={() => handleSearch()}>
             Search ALL
           </button>
         </div>
@@ -114,21 +82,21 @@ const Typehead = () => {
             {suggestions.map((suggestion, i) => {
               const slicedIndex = suggestion.name
                 .toLowerCase()
-                .indexOf(value.toLowerCase());
+                .indexOf(searchValue.toLowerCase());
               //IF sliceIndex === 0
               const firstPart = suggestion.name.slice(
                 0,
-                slicedIndex + value.length
+                slicedIndex + searchValue.length
               );
               //IF sliceIndex > 0
               const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
               const offFirstPartStartWritten = suggestion.name.slice(
                 slicedIndex,
-                slicedIndex + value.length
+                slicedIndex + searchValue.length
               );
               //Rest of the suggestion
               const secondPart = suggestion.name.slice(
-                slicedIndex + value.length
+                slicedIndex + searchValue.length
               );
               const isSelected =
                 suggestions.indexOf(suggestion) === suggestionIndex
@@ -139,7 +107,7 @@ const Typehead = () => {
                 <Suggestion
                   key={suggestion._id}
                   // onClick={() => handleSelect(suggestion.name)}
-                  onClick={() => handleSelect(suggestions[suggestionIndex])}
+                  onClick={() => handleSearch(suggestions[suggestionIndex])}
                   style={{
                     background: isSelected
                       ? 'hsla(50deg, 100%, 80%, 0.25)'
@@ -219,7 +187,7 @@ const Logo = styled.div`
   border: solid 2px green;
   /* align-self: flex-start;
   justify-self: flex-start; */
-  
+
   top: 10%;
   bottom: 10%;
   left: 10px;
@@ -242,7 +210,6 @@ const CartWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   position: relative;
-  
 `;
 
 const CartButton = styled(Link)`

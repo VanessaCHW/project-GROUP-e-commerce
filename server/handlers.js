@@ -110,64 +110,14 @@ const getCompanies = (req, res) => {
 };
 
 //Add and get a new array of the searched items
+
 const getProductSearch = (req, res) => {
-  let newArray = req.body;
-  const newArrayId = uuidv4();
-  // SEARCHED.push(newArrayId);
-  // SEARCHED.push(newArray);
-  // console.log(SEARCHED, 'SEARCHED');
-  // if (SEARCHED.length > 1) {
-  //   SEARCHED.push(newArrayId);
-  //   SEARCHED.push(newArray);
-  // } else {
-  //   SEARCHED.push(newArrayId);
-  //   SEARCHED.push(newArray);
-  // }
-  // SEARCHED.push(newArrayId);
-  // SEARCHED.push(newArray);
-  // console.log(newArray, 'SEARCHED');
-
-  if (newArray) {
-    res.status(200).json({
-      status: 200,
-      // id: newArrayId,
-      // data: { array: searchArray, id: newArrayId },
-      id: newArrayId,
-      data: [newArray],
-      message: 'New Searched Array added',
-    });
-  } else {
-    res.status(404).json({ status: 404, error: `Cannot add searched array` });
-  }
-};
-
-const getSearchArray = (req, res) => {
-  const searchedId = req.params.searchedId;
-  // console.log(searchedId, 'CONSOLE');
-  // console.log(SEARCHED[0], 'SEACHED');
-
-  // if (SEARCHED !== []) {
-  //   if (SEARCHED[0] === searchedId) {
-  res.status(200).json({
-    status: 200,
-    data: 'DATA',
-    message: 'New Searched Array added',
-  });
-  //   }
-  // } else {
-  // res
-  //   .status(404)
-  //   .json({ status: 404, error: `Cannot find ${searchedId} id` });
-  // }
-};
-
-const getTypehead = (req, res) => {
-  const typeheadValue = req.params.typeheadValue;
-  console.log(typeheadValue, 'TYPEHEAD');
+  const keyword = req.params.keyword;
+  console.log(keyword, 'TYPEHEAD');
 
   //Search for products with the typeheadValue
   const matchedSuggestions = items.filter((item) => {
-    return item.name.toLowerCase().includes(typeheadValue.toLowerCase());
+    return item.name.toLowerCase().includes(keyword.toLowerCase());
   });
   if (matchedSuggestions) {
     res.status(200).json({
@@ -178,7 +128,7 @@ const getTypehead = (req, res) => {
   } else {
     res.status(404).json({
       status: 404,
-      error: `No match for ${typeheadValue}`,
+      error: `No match for ${keyword}`,
     });
   }
 };
@@ -191,6 +141,4 @@ module.exports = {
   getProductInfo,
   getCompanies,
   getProductSearch,
-  getSearchArray,
-  getTypehead,
 };
