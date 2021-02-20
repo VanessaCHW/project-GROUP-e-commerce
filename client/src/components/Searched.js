@@ -30,7 +30,7 @@ const Searched = () => {
       // console.log(searchedId, 'inside else if');
       fetch(`/api/products/search`, {
         method: 'POST',
-        body: JSON,
+        body: JSON, //add suggestions from reducer
       })
         .then((res) => res.json())
         .then((json) => {
