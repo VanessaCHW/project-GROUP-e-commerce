@@ -7,17 +7,23 @@ import CartItem from './CartItem';
 
 const Cart = () => {
     const storeItems = useSelector((state) => state);
-    console.log(storeItems,"storeItems")
+    console.log(Object.values(storeItems),"Aaaaaaaa")
     return (
     <Wrapper>
         <Container>
             {storeItems && 
-            Object.values(storeItems).map((item) => (
-            <CartItem 
-            key={item.id}
-            item={item}
-            />
-            ))
+            Object.values(storeItems).map((item) => {
+            console.log(item, 'ITEM in cart.js')
+            return(
+                <CartItem 
+                    key={item.id}
+                    item={item}
+                    id={item._id}
+                    quantity={item.quantity}
+                />  
+            );
+            }
+)
             }
         </Container>
     </Wrapper>

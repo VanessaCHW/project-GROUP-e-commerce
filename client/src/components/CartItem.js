@@ -1,14 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux'
+import { updateQuantity, removeItem } from './action'
 
-const CartItem = ({item}) => {
+const CartItem = ({item ,id , quantity}) => {
+  // const [quantity, setQuantity] = useState(null)
   const dispatch = useDispatch();
 
-  // const addQuantity = (quantity) => {
+  console.log(quantity, 'quantity in CartItem.js')
+  const updateQuantityInCart = (id, quantity) => {
+  const addNumber = updateQuantity(id, quantity)
+      dispatch(addNumber)}
+
+
+
+
+  // const removeItem = (item) => {
   //   setQuantityBox(quantity)
-  //   console.log(Quantity,"Aaaaaaaaa")
   // }
+  // const addToCart = (item) => {
+  //   const action = addItem(item)
+  //   dispatch(action)
+  // }
+  console.log(item,"ITEM")
     return (
       <Wrapper>
         <Content>
@@ -17,32 +31,31 @@ const CartItem = ({item}) => {
           </ImgContainer>
           <InfoBox>
             <Name>{item.name}</Name>
-            <hr />
-            <Tags>
-              <div>{item.category.toLowerCase()}</div>
-              <div>{item.body_location.toLowerCase()}</div>
-            </Tags>
-            <Price>{item.price.slice(1)} $</Price>
-            {/* <QuantityButtons>
+            <CategoryTags>
+              <div>{item.category}</div>
+              <div>{item.body_location}</div>
+            </CategoryTags>
+            <Price>{item.price}</Price>
+            <QuantityButtons>
               <button
-                onClick={() => addQuantity(quantityBox - 1)}
+                onClick={() => updateQuantityInCart(id, quantity - 1)}
                 disabled={
-                  item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
+                  item.numInStock > 0 ? (quantity > 0 ? false : true) : true
                 }
               >
                 -
               </button>
               <Quantity
-                value={quantityBox}
-                onChange={(ev) => addQuantity(parseInt(ev.target.value))}
+                value={quantity}
+                onChange={(ev) => updateQuantityInCart(id, parseInt(ev.target.value))}
               />
-              <button
-                onClick={() => addQuantity(quantityBox + 1)}
+              <button  // => dispatch(updateQuantity({quantity}))
+                onClick={() => updateQuantityInCart(id, quantity+ 1)}
                 disabled={item.numInStock > 0 ? false : true}
               >
                 +
               </button>
-            </QuantityButtons> */}
+            </QuantityButtons>
           </InfoBox>
         </Content>
       </Wrapper>
@@ -52,14 +65,6 @@ const CartItem = ({item}) => {
 
 const Wrapper = styled.div`
   width: 100%;
-  nav {
-    border: 2px black solid;
-    height: 5%;
-  }
-  hr {
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    margin-bottom: 15px;
-  }
 `;
 
 const Content = styled.div`
@@ -71,8 +76,8 @@ const Content = styled.div`
 `;
 
 const ImgContainer = styled.div`
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -91,7 +96,7 @@ const Name = styled.div`
   margin-bottom: 10px;
 `;
 
-const Tags = styled.div`
+const CategoryTags = styled.div`
   display: flex;
   flex-direction: row;
   div {
@@ -107,6 +112,18 @@ const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 500;
   margin: 40px 0 20px 0;
+`;
+
+const QuantityButtons = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Quantity = styled.textarea`
+  width: 40px;
+  height: 26px;
+  text-align: center;
+  resize: none;
 `;
 
 export default CartItem;

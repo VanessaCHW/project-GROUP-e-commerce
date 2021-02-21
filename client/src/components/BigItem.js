@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
 import { useDispatch } from 'react-redux'
 import { addItem } from './action'
@@ -27,7 +27,6 @@ const BigItem = () => {
         console.error('Unable to retrieve product details', error);
       });
   }, [currentID]);
-console.log(currentID,"Bbbbbbbbbbb")
   // Determine the vendor name by using a filter.
   // Using a hook for now because 'item' and 'companies' take time to load.
   useEffect(() => {
@@ -40,13 +39,10 @@ console.log(currentID,"Bbbbbbbbbbb")
 
   const addQuantity = (quantity) => {
     setQuantityBox(quantity)
-    console.log(Quantity,"Aaaaaaaaa")
   }
 
-  const addToCart = (item) => {
-    console.log(item,"XXXXXXXXXXX")
-    const action = addItem(item)
-    console.log(action,"XAction")
+  const addToCart = (item,qty) => {
+    const action = addItem({...item, quantity: quantityBox}) //ajouter qty
     dispatch(action)
   }
   if (item && vendor) {
