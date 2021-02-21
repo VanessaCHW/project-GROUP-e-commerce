@@ -90,11 +90,9 @@ const FilterBox2 = ({ filteredItems, setFilteredItems, setCurrentPage }) => {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           setFilteredItems(res.data);
         });
     }
-    console.log('FILTERS', filters);
   }, [filters]);
   if (filteredItems) {
     return (
