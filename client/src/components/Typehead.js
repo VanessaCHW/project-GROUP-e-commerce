@@ -4,15 +4,24 @@ import { useHistory, Link } from 'react-router-dom';
 import { SearchContext } from './SearchContext';
 
 const Typehead = () => {
+  const {
+    actions: { searchByKeyword },
+  } = React.useContext(SearchContext);
   const [status, setStatus] = React.useState('loading');
   const [searchValue, setSearchValue] = React.useState('');
   const [suggestions, setSuggestions] = React.useState(null);
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
   const [ulToggle, setUlToggle] = React.useState(true);
   const history = useHistory();
-  const {
-    actions: { searchByKeyword },
-  } = React.useContext(SearchContext);
+
+  React.useEffect(() => {
+    fetch(`/api/search/${searchValue}`)
+      .then((res) => res.json())
+      .then((json) => {
+        setSuggestions(json.data);
+        setStatus('idle');
+      });
+  }, [searchValue]);
 
   //HANDLERS
   const handleBackToHomepage = () => {

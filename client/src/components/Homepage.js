@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 import HomepageItems from './HomepageItems';
 import { ProductsContext } from './ProductsContext';
+import { SearchContext } from './SearchContext';
+let test = 'fitness';
 
 const Homepage = () => {
-  const { products, productsStatus } = React.useContext(ProductsContext);
+  const { products } = React.useContext(SearchContext);
+  // const { products, productsStatus } = React.useContext(ProductsContext);
   const [uniqueCategory, setUniqueCategory] = React.useState(null);
   const [status, setStatus] = React.useState('loading');
-
-  const [hotItems, setHotItems] = React.useState(null);
-  const [counter, setCounter] = React.useState(0);
 
   //Get unique categories
   React.useEffect(() => {
@@ -28,31 +28,28 @@ const Homepage = () => {
         <div>Loading...</div>
       </>
     );
+  } else {
+    return (
+      <Wrapper>
+        {uniqueCategory.map((category) => {
+          const itemInCategory = products.filter((item) => {
+            return (
+              item.category.split(' ').join('').toLowerCase() ===
+              category.split('-').join('').toLowerCase()
+            );
+          });
+          if (itemInCategory.some((item) => 2 >= item.numInStock > 0)) {
+            return (
+              <ItemsContainer>
+                <h4>Hot items in {category}</h4>
+                <HomepageItems category={category} />
+              </ItemsContainer>
+            );
+          }
+        })}
+      </Wrapper>
+    );
   }
-  return (
-    <Wrapper>
-      {/* <ItemsContainer> */}
-      {/* <div>Almost out of stock!</div>
-        <div className="container">
-          {products.map((product) => {
-            if (product.numInStock <= 2) {
-              // setCounter(counter + 1);
-              return <HomepageItems product={product} />;
-            }
-          })}
-        </div> */}
-
-      {uniqueCategory.map((category) => {
-        return (
-          <ItemsContainer>
-            <h4>Hot items in {category}</h4>
-            <HomepageItems category={category} />
-          </ItemsContainer>
-        );
-      })}
-      {/* </ItemsContainer> */}
-    </Wrapper>
-  );
 };
 
 const Wrapper = styled.div``;

@@ -18,24 +18,25 @@ export const SearchProvider = ({ children }) => {
   };
   const searchByKeyword = (keyword) => {
     setSearchUrl(`${productSearchUrl.keyword}${keyword}`);
-    console.log(`${productSearchUrl.keyword}${keyword}`, 'URL');
   };
-
   useEffect(() => {
-    if (searchUrl !== productSearchUrl.all) {
-      setSearchStatus('loading');
-      fetch(searchUrl)
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res.data, `DATA INSIDE FETCH`);
+    //if (searchUrl !== productSearchUrl.all) {
+    setSearchStatus('loading');
+    fetch(searchUrl)
+      .then((res) => res.json())
+      .then((res) => {
+        if (searchUrl === productSearchUrl.all) {
+          setProducts(Object.values(res.data));
+        } else {
           setProducts(res.data);
-          setSearchStatus('idle');
-        })
-        .catch((error) => {
-          console.error('Error: unable to retrieve products', error);
-          setSearchStatus('error');
-        });
-    }
+        }
+        setSearchStatus('idle');
+      })
+      .catch((error) => {
+        console.error('Error: unable to retrieve products', error);
+        setSearchStatus('error');
+      });
+    // }
   }, [searchUrl]);
 
   return (

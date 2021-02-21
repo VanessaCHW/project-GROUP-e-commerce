@@ -12,7 +12,6 @@ const Searched = () => {
   const { products, searchStatus } = React.useContext(SearchContext);
   const [currentPage, setCurrentPage] = React.useState(0); //Pagination state
   const [filteredItems, setFilteredItems] = React.useState(products); // Copy of "items" to be filtered
-  console.log(products, 'PRODUCTS');
   // For pagination links
   function handlePageClick({ selected: selectedPage }) {
     window.scrollTo(0, 0);
