@@ -1,41 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
-import { SearchContext } from './SearchContext';
+import { useHistory } from 'react-router-dom';
+import uuid from 'uuid';
 
-const Typehead = () => {
-  const {
-    actions: { searchByKeyword },
-  } = React.useContext(SearchContext);
-  const [status, setStatus] = React.useState('loading');
-  const [searchValue, setSearchValue] = React.useState('');
-  const [suggestions, setSuggestions] = React.useState(null);
+const Typehead = ({ suggestions }) => {
+  const [value, setValue] = React.useState('');
   const [suggestionIndex, setSuggestionIndex] = React.useState(-1);
   const [ulToggle, setUlToggle] = React.useState(true);
   const history = useHistory();
-
-  React.useEffect(() => {
-    fetch(`/api/search/${searchValue}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setSuggestions(json.data);
-        setStatus('idle');
-      });
-  }, [searchValue]);
-
+  const matchedSuggestions =
+    value.length > 1
+      ? suggestions.filter((suggestion) =>
+          suggestion.name.toLowerCase().includes(value.toLowerCase())
+        )
+      : [];
   //HANDLERS
+  const handleSelect = (suggestion) => {
+    // window.alert(suggestion);
+    if (Array.isArray(suggestion) && suggestion.length > 1) {
+      // console.log(suggestion, 'if');
+      fetch('/api/add-search-array', {
+        method: 'POST',
+        body: JSON.stringify({ suggestions: suggestion }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          // console.log(json, 'json');
+          history.push(`/searched/${json.data[0][0]}`);
+          return;
+        });
+    } else {
+      history.push(`/product/${suggestion._id}`);
+      console.log(suggestion, 'else');
+    }
+  };
+
   const handleBackToHomepage = () => {
     history.push('/');
   };
 
-  const handleSearch = () => {
-    searchByKeyword(searchValue);
-    history.push('/searched');
+  const handleMatchedSuggestions = (suggestions) => {
+    handleSelect(suggestions);
   };
 
-  // if (status === 'idle') {
-  //   console.log(suggestions, 'VALUE');
-  // }
   return (
     <Wrapper>
       <Logo onClick={handleBackToHomepage}>LOGO</Logo>
@@ -43,22 +54,22 @@ const Typehead = () => {
         <div className="inputContainer">
           <input
             type="text"
-            value={searchValue}
+            value={value}
             onChange={(ev) => {
-              setSearchValue(ev.target.value);
+              setValue(ev.target.value);
               setUlToggle(true);
+              return;
             }}
             onKeyDown={(ev) => {
               switch (ev.key) {
                 case 'Enter': {
                   if (suggestionIndex === -1) {
-                    handleSearch(searchValue);
-                    // handleMatchedSuggestions(matchedSuggestions);
+                    handleMatchedSuggestions(matchedSuggestions);
                     // setUlToggle(false);
                     // return;
                   } else {
-                    // handleSelect(matchedSuggestions[suggestionIndex]);
-                    // setValue(matchedSuggestions[suggestionIndex].name);
+                    handleSelect(matchedSuggestions[suggestionIndex]);
+                    setValue(matchedSuggestions[suggestionIndex].name);
                     // setUlToggle(false);
                     // return;
                   }
@@ -73,7 +84,7 @@ const Typehead = () => {
                 }
                 case 'ArrowDown':
                   {
-                    if (suggestions.length - 1 > suggestionIndex) {
+                    if (matchedSuggestions.length - 1 > suggestionIndex) {
                       setSuggestionIndex(suggestionIndex + 1);
                     }
                   }
@@ -82,33 +93,36 @@ const Typehead = () => {
             }}
           />
           {/* <button className="clearBtn" onClick={() => setValue('')}> */}
-          <button className="searchBtn" onClick={() => handleSearch()}>
+          <button
+            className="searchBtn"
+            onClick={() => handleMatchedSuggestions(matchedSuggestions)}
+          >
             Search ALL
           </button>
         </div>
-        {ulToggle && suggestions && (
+        {ulToggle && (
           <ul>
-            {suggestions.map((suggestion, i) => {
+            {matchedSuggestions.map((suggestion, i) => {
               const slicedIndex = suggestion.name
                 .toLowerCase()
-                .indexOf(searchValue.toLowerCase());
+                .indexOf(value.toLowerCase());
               //IF sliceIndex === 0
               const firstPart = suggestion.name.slice(
                 0,
-                slicedIndex + searchValue.length
+                slicedIndex + value.length
               );
               //IF sliceIndex > 0
               const offFirstPartStart = suggestion.name.slice(0, slicedIndex);
               const offFirstPartStartWritten = suggestion.name.slice(
                 slicedIndex,
-                slicedIndex + searchValue.length
+                slicedIndex + value.length
               );
               //Rest of the suggestion
               const secondPart = suggestion.name.slice(
-                slicedIndex + searchValue.length
+                slicedIndex + value.length
               );
               const isSelected =
-                suggestions.indexOf(suggestion) === suggestionIndex
+                matchedSuggestions.indexOf(suggestion) === suggestionIndex
                   ? true
                   : false;
 
@@ -116,7 +130,9 @@ const Typehead = () => {
                 <Suggestion
                   key={suggestion._id}
                   // onClick={() => handleSelect(suggestion.name)}
-                  onClick={() => handleSearch(suggestions[suggestionIndex])}
+                  onClick={() =>
+                    handleSelect(matchedSuggestions[suggestionIndex])
+                  }
                   style={{
                     background: isSelected
                       ? 'hsla(50deg, 100%, 80%, 0.25)'
@@ -147,7 +163,7 @@ const Typehead = () => {
         )}
       </div>
       <CartWrapper>
-        <CartButton to="/cart">Cart</CartButton>
+        <CartButton href="/cart">Cart</CartButton>
       </CartWrapper>
     </Wrapper>
   );
@@ -156,7 +172,7 @@ const Typehead = () => {
 const Wrapper = styled.div`
   border: solid 2px red;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   /* align-items: center; */
   /* flex-direction: column; */
   padding: 10px 0;
@@ -196,7 +212,7 @@ const Logo = styled.div`
   border: solid 2px green;
   /* align-self: flex-start;
   justify-self: flex-start; */
-
+  position: absolute;
   top: 10%;
   bottom: 10%;
   left: 10px;
@@ -219,9 +235,10 @@ const CartWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   position: relative;
+  left: 400px;
 `;
 
-const CartButton = styled(Link)`
+const CartButton = styled.a`
   border: 2px solid black;
   text-decoration: none;
   text-align: center;

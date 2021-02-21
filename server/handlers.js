@@ -7,12 +7,21 @@ const {
   sort_HighToLow,
   sort_byId,
 } = require('./filterFunctions');
-let SEARCHED = [];
+
+// let SEARCHED = [];
 
 // Returns all items from the inventory
 const getProducts = (req, res) => {
-  /////Get all unqiue categories
+  res.status(200).json({
+    status: 200,
+    message: 'Request for all items fulfilled',
+    data: { ...items },
+  });
+};
 
+//Return all unique categories
+const getAllUniqueCategories = (req, res) => {
+  /////Get all unqiue categories
   // const newArr = [];
   // items.some((item) => {
   //   if (newArr.includes(item.category)) {
@@ -24,16 +33,21 @@ const getProducts = (req, res) => {
   // console.log(newArr, 'UNIQUE CATEGORY');
 
   /////Simpler way to get all unique categories
-
-  // const uniqueSet = new Set(items.map((item) => item.category));
-  // const uniqueArr = [...uniqueSet];
+  const uniqueSet = new Set(items.map((item) => item.category));
+  const uniqueArr = [...uniqueSet];
   // console.log(uniqueArr, 'UNIQUE CATEGORY');
-
-  res.status(200).json({
-    status: 200,
-    message: 'Request for all items fulfilled',
-    data: { ...items },
-  });
+  if (uniqueArr) {
+    res.status(200).json({
+      status: 200,
+      message: `Request for all unique categories fulfilled`,
+      data: uniqueArr,
+    });
+  } else {
+    res.status(404).json({
+      status: 404,
+      message: `${uniqueArr} not found`,
+    });
+  }
 };
 
 //Returns the first 8 items from the inventory
@@ -49,7 +63,7 @@ const getSomeProducts = (req, res) => {
 const getCategory = (req, res) => {
   //Get the category from the url ('/api/category/:category)
   const itemCategory = req.params.categoryId;
-  console.log(itemCategory.split('-').join('').toLowerCase());
+  // console.log(itemCategory.split('-').join('').toLowerCase());
 
   //Check if the category exist first, if not, send an error
   if (
@@ -101,52 +115,26 @@ const getCompanies = (req, res) => {
 };
 
 //Add and get a new array of the searched items
-const addSearchArray = (req, res) => {
-  let newArray = req.body;
-  const newArrayId = uuidv4();
-  // SEARCHED.push(newArrayId);
-  // SEARCHED.push(newArray);
-  console.log(SEARCHED, 'SEARCHED');
-  if (SEARCHED.length > 1) {
-    SEARCHED = [];
-    SEARCHED.push(newArrayId);
-    SEARCHED.push(newArray);
-    console.log(SEARCHED, 'SEARCHED inside IF');
-  } else {
-    SEARCHED.push(newArrayId);
-    SEARCHED.push(newArray);
-  }
 
-  if (newArray) {
+const getProductSearch = (req, res) => {
+  const keyword = req.params.keyword;
+  console.log(keyword, 'TYPEHEAD');
+
+  //Search for products with the typeheadValue
+  const matchedSuggestions = items.filter((item) => {
+    return item.name.toLowerCase().includes(keyword.toLowerCase());
+  });
+  if (matchedSuggestions) {
     res.status(200).json({
       status: 200,
-      // id: newArrayId,
-      // data: { array: searchArray, id: newArrayId },
-      data: [SEARCHED],
-      message: 'New Searched Array added',
+      data: matchedSuggestions,
+      message: 'Received data from typehead',
     });
   } else {
-    res.status(404).json({ status: 404, error: `Cannot add searched array` });
-  }
-};
-
-const getSearchArray = (req, res) => {
-  const searchedId = req.params.searchedId;
-  console.log(searchedId, 'CONSOLE');
-  console.log(SEARCHED[0], 'SEACHED');
-
-  if (SEARCHED !== []) {
-    if (SEARCHED[0] === searchedId) {
-      res.status(200).json({
-        status: 200,
-        data: SEARCHED,
-        message: 'New Searched Array added',
-      });
-    }
-  } else {
-    res
-      .status(404)
-      .json({ status: 404, error: `Cannot find ${searchedId} id` });
+    res.status(404).json({
+      status: 404,
+      error: `No match for ${keyword}`,
+    });
   }
 };
 
@@ -214,11 +202,11 @@ const getFilterResults = (req, res) => {
 
 module.exports = {
   getProducts,
+  getAllUniqueCategories,
   getSomeProducts,
   getCategory,
   getProductInfo,
   getCompanies,
-  addSearchArray,
-  getSearchArray,
   getFilterResults,
+  getProductSearch,
 };

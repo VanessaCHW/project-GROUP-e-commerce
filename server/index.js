@@ -5,13 +5,15 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const {
   getProducts,
+  getAllUniqueCategories,
   getSomeProducts,
   getProductInfo,
   getCategory,
   getCompanies,
-  addSearchArray,
+  getProductSearch,
   getSearchArray,
   getFilterResults,
+  getTypehead,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -38,13 +40,17 @@ express()
   .get('/bacon', (req, res) => res.status(200).json('🥓'))
 
   .get('/api/products', getProducts) // Returns ALL item info
+  .get('/api/get-all-unique-categories', getAllUniqueCategories)
   .get('/api/someproducts', getSomeProducts) //Returns the first 8 items
   .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
   .get('/api/companies', getCompanies)
-  .post('/api/add-search-array', addSearchArray)
-  .get('/api/searched/:searchedId', getSearchArray)
   .post('/api/filter', getFilterResults)
+  .get('/api/search/:keyword', getProductSearch)
+
+  // .get('/api/productsByIds', getProductsByIds)
+  //products?size=50
+  //productBySearchTerm?searchTerm=:value
 
   // Catch all endpoint
   .get('*', (req, res) =>

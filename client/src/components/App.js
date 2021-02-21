@@ -32,7 +32,7 @@ function App() {
               <Homepage />
             </Route>
             {/*Route for searched items*/}
-            <Route exact path="/searched/:searchedId">
+            <Route exact path="/searched">
               <Searched />
               {/* <Homepage /> */}
             </Route>
