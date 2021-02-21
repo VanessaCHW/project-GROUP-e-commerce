@@ -2,31 +2,12 @@ import React, { createContext, useEffect, useState } from 'react';
 
 export const ProductsContext = createContext(null);
 
-const initialState = [];
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case 'ADD_SEARCH_ARRAY': {
-      return [...action.payload];
-    }
-    default:
-      throw new Error(`Unrecognized action: ${action.type}`);
-  }
-}
-
 export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState(null);
   const [productsStatus, setProductsStatus] = useState('loading');
 
   const [companies, setCompanies] = useState(null);
   const [companiesStatus, setCompaniesStatus] = useState('loading');
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  const addSearchArray = (data) => {
-    dispatch({
-      type: 'ADD_SEARCH_ARRAY',
-      payload: data,
-    });
-  };
 
   // Returns an array of ALL products
   useEffect(() => {
@@ -69,10 +50,6 @@ export const ProductsProvider = ({ children }) => {
         productsStatus,
         companies,
         companiesStatus,
-        state,
-        actions: {
-          addSearchArray,
-        },
       }}
     >
       {children}

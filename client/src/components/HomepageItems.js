@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const HomepageItems = ({ category }) => {
   const [products, setProducts] = React.useState(null);
@@ -32,16 +33,12 @@ const HomepageItems = ({ category }) => {
     return (
       <Wrapper>
         {products.map((product) => {
-          if (product.numInStock <= 2) {
-            // setCounter(counter + 1);
-
+          if (2 >= product.numInStock > 0) {
             return (
-              <Product>
+              <Product to={`/product/${product._id}`}>
                 <img src={product.imageSrc} />
               </Product>
             );
-          } else {
-            return;
           }
         })}
       </Wrapper>
@@ -54,7 +51,7 @@ const Wrapper = styled.div`
   display: flex;
   overflow-x: auto;
 `;
-const Product = styled.div`
+const Product = styled(Link)`
   border: solid red 1px;
   border: solid red 1px;
   display: inline-flex;
