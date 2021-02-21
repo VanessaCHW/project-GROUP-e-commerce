@@ -5,7 +5,7 @@ import { SearchContext } from './SearchContext';
 
 const Typehead = () => {
   const {
-    actions: { searchByKeyword },
+    actions: { searchByKeyword, searchAll },
   } = React.useContext(SearchContext);
   const [status, setStatus] = React.useState('loading');
   const [searchValue, setSearchValue] = React.useState('');
@@ -25,6 +25,7 @@ const Typehead = () => {
 
   //HANDLERS
   const handleBackToHomepage = () => {
+    searchAll();
     history.push('/');
   };
 
