@@ -123,7 +123,7 @@ const FilterBox = ({
   const handleInput = (id, state, setState) => {
     if (document.getElementById(id).checked) {
       setState([...state, id]);
-      console.log(state);
+      // console.log(state);
     } else {
       let temp = [...state];
       temp.splice(temp.indexOf(id), 1);
@@ -190,8 +190,8 @@ const FilterBox = ({
   };
 
   const filterByStock = (data) => {
-    console.log('yo');
-    console.log(stockFilter);
+    // console.log('yo');
+    // console.log(stockFilter);
     if (stockFilter === 'nostock') {
       setFilteredItems([...data.filter((item) => item.numInStock === 0)]);
       return filteredItems;

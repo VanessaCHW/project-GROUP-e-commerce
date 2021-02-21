@@ -45,7 +45,12 @@ export const ProductsProvider = ({ children }) => {
 
   return (
     <ProductsContext.Provider
-      value={{ products, productsStatus, companies, companiesStatus }}
+      value={{
+        products,
+        productsStatus,
+        companies,
+        companiesStatus,
+      }}
     >
       {children}
     </ProductsContext.Provider>

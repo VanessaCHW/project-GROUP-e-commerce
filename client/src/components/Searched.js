@@ -6,66 +6,43 @@ import ReactPaginate from 'react-paginate';
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
 import FilterBox from './FilterBox';
+import { SearchContext } from './SearchContext';
 
 const Searched = () => {
-  const [items, setItems] = React.useState(null);
-  const [status, setStatus] = React.useState('loading');
+  const { products, searchStatus } = React.useContext(SearchContext);
   const [currentPage, setCurrentPage] = React.useState(0); //Pagination state
-  const [filteredItems, setFilteredItems] = React.useState(null); // Copy of "items" to be filtered
-  const { categoryId } = useParams();
-  const { searchedId } = useParams();
-
-  React.useEffect(() => {
-    // console.log(searchedId, 'inside useEffecy');
-    if (categoryId) {
-      fetch(`/api/category/${categoryId}`)
-        .then((res) => res.json())
-        .then((json) => {
-          setItems(json.data);
-          setFilteredItems(json.data);
-          setStatus('idle');
-        });
-    }
-    if (searchedId) {
-      // console.log(searchedId, 'inside else if');
-      fetch(`/api/searched/${searchedId}`)
-        .then((res) => res.json())
-        .then((json) => {
-          // console.log(json.data[1].suggestions, 'JSON SEARCHED');
-          setItems(json.data[1].suggestions);
-          setFilteredItems(json.data[1].suggestions);
-          setStatus('idle');
-        });
-    }
-  }, [searchedId]);
-
+  const [filteredItems, setFilteredItems] = React.useState(products); // Copy of "items" to be filtered
   // For pagination links
   function handlePageClick({ selected: selectedPage }) {
     window.scrollTo(0, 0);
     setCurrentPage(selectedPage);
   }
 
-  if (status === 'loading') {
+  if (searchStatus === 'loading') {
     return <div>Loading...</div>;
   } else {
     //Constants for pagination
-    const itemsPerPage = 24;
+    const itemsPerPage = 16;
     const offset = currentPage * itemsPerPage;
     const data = filteredItems.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(filteredItems.length / itemsPerPage);
-    //console.log(items, 'ITEMS');
+    // setFilteredItems(products);
+
     return (
       <Wrapper>
         <FilterBox
           filteredItems={filteredItems}
           setFilteredItems={setFilteredItems}
-          originalArray={items}
+          originalArray={products}
           setCurrentPage={setCurrentPage}
         />
         <ItemsContainer>
           {data.map((item) => {
             return <SmallItem item={item} key={item._id} id={item._id} />;
           })}
+          {/* {products.map((product) => {
+            return <SmallItem item={product} />;
+          })} */}
           <Pagination>
             <ReactPaginate
               previousLabel={'Previous'}
