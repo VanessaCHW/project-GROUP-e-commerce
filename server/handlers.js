@@ -147,7 +147,6 @@ const getFilterResults = (req, res) => {
   //Apply filters
   let result = [];
   result = array
-    .filter((item) => item.category.toLowerCase() === req.body.categoryId)
     .filter((item) => {
       if (req.body.brandId.length > 0) {
         return req.body.brandId.includes(item.companyId.toString());

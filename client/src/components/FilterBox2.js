@@ -1,19 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ProductsContext } from './ProductsContext';
+import { SearchContext } from './SearchContext';
 
-const FilterBox2 = ({
-  filteredItems,
-  setFilteredItems,
-  originalArray,
-  setCurrentPage,
-  categoryId,
-}) => {
+const FilterBox2 = ({ filteredItems, setFilteredItems, setCurrentPage }) => {
   const { companies } = useContext(ProductsContext);
-  const allIds = originalArray.map((item) => item._id);
+  const { products } = useContext(SearchContext);
+  const allIds = products.map((item) => item._id);
   const initialFilters = {
     allIds: allIds,
-    categoryId: categoryId,
     sorting: 'featured',
     brandId: [],
     price: { start: null, end: null },
@@ -24,7 +19,7 @@ const FilterBox2 = ({
   // Produce list of company ids
   const getAllCompanyId = () => {
     let temp = [];
-    originalArray.forEach((item) => {
+    products.forEach((item) => {
       if (!temp.includes(item.companyId)) {
         temp.push(item.companyId);
       }
@@ -99,89 +94,96 @@ const FilterBox2 = ({
           setFilteredItems(res.data);
         });
     }
+    console.log('FILTERS', filters);
   }, [filters]);
-
-  return (
-    <Wrapper>
-      <form>
-        <SortByPrice id="sortBy" onChange={(ev) => handleSort(ev.target.value)}>
-          <option value="featured">Sort by: Featured </option>
-          <option value="lowToHigh">Price: Low to High</option>
-          <option value="highToLow">Price: High to Low</option>
-        </SortByPrice>
-        <div className="brandSection">
-          <div className="sectionTitle">Brand</div>
-          {companyData.map((company) => {
-            return (
-              <>
-                <label>
-                  <input
-                    type="checkbox"
-                    id={company.id}
-                    value={company.id}
-                    onChange={(ev) => handleBrands(ev.target.value)}
-                  />
-                  {company.name}
-                </label>
-                <br />
-              </>
-            );
-          })}
-        </div>
-        <div className="priceSection">
-          <div className="sectionTitle">Price</div>
-          <Price>
-            <PriceBox
-              placeholder="$Min"
-              id="min"
-              value={filters.price.start}
-              onChange={(ev) =>
-                setFilters({
-                  ...filters,
-                  price: { ...filters.price, start: ev.target.value },
-                })
-              }
-            />
-            <PriceBox
-              placeholder="$Max"
-              id="max"
-              onChange={(ev) =>
-                setFilters({
-                  ...filters,
-                  price: { ...filters.price, end: ev.target.value },
-                })
-              }
-            />
-          </Price>
-        </div>
-        <div className="stockSection">
-          <div className="sectionTitle">Availability</div>
-          <label>
-            <input
-              type="checkbox"
-              id="instock"
-              name="instock"
-              value="instock"
-              onChange={(ev) => handleStock('instock')}
-            />
-            In stock
-          </label>
-          <br />
-          <label>
-            <input
-              type="checkbox"
-              id="nostock"
-              name="nostock"
-              value="nostock"
-              onChange={(ev) => handleStock('nostock')}
-            />
-            Out of stock
-          </label>
-          <br />
-        </div>
-      </form>
-    </Wrapper>
-  );
+  if (filteredItems) {
+    return (
+      <Wrapper>
+        <form>
+          <SortByPrice
+            id="sortBy"
+            onChange={(ev) => handleSort(ev.target.value)}
+          >
+            <option value="featured">Sort by: Featured </option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+          </SortByPrice>
+          <div className="brandSection">
+            <div className="sectionTitle">Brand</div>
+            {companyData.map((company) => {
+              return (
+                <>
+                  <label>
+                    <input
+                      type="checkbox"
+                      id={company.id}
+                      value={company.id}
+                      onChange={(ev) => handleBrands(ev.target.value)}
+                    />
+                    {company.name}
+                  </label>
+                  <br />
+                </>
+              );
+            })}
+          </div>
+          <div className="priceSection">
+            <div className="sectionTitle">Price</div>
+            <Price>
+              <PriceBox
+                placeholder="$Min"
+                id="min"
+                value={filters.price.start}
+                onChange={(ev) =>
+                  setFilters({
+                    ...filters,
+                    price: { ...filters.price, start: ev.target.value },
+                  })
+                }
+              />
+              <PriceBox
+                placeholder="$Max"
+                id="max"
+                onChange={(ev) =>
+                  setFilters({
+                    ...filters,
+                    price: { ...filters.price, end: ev.target.value },
+                  })
+                }
+              />
+            </Price>
+          </div>
+          <div className="stockSection">
+            <div className="sectionTitle">Availability</div>
+            <label>
+              <input
+                type="checkbox"
+                id="instock"
+                name="instock"
+                value="instock"
+                onChange={(ev) => handleStock('instock')}
+              />
+              In stock
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                id="nostock"
+                name="nostock"
+                value="nostock"
+                onChange={(ev) => handleStock('nostock')}
+              />
+              Out of stock
+            </label>
+            <br />
+          </div>
+        </form>
+      </Wrapper>
+    );
+  } else {
+    return <Wrapper>Loading</Wrapper>;
+  }
 };
 const Wrapper = styled.div`
   width: 265px;

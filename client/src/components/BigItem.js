@@ -57,12 +57,20 @@ const BigItem = () => {
             <Link to={`/category/{item.category}`}>{item.category}</Link>
           </div>
           <Name>{item.name}</Name>
-          <Vendor target="_blank" href={vendor.url}>
+          <Vendor target="_blank" to={vendor.url}>
             Visit the {vendor.name} website
           </Vendor>
           <Price>{item.price.slice(1)} $</Price>
 
           <Description>
+            <Desc>
+              <DescHead>Description:</DescHead>
+              <div>{item.name}</div>
+            </Desc>{' '}
+            <Desc>
+              <DescHead>Product ID:</DescHead>
+              <div>{currentID}</div>
+            </Desc>
             <Desc>
               <DescHead>Brand:</DescHead>
               <div> {vendor.name}</div>
@@ -72,20 +80,18 @@ const BigItem = () => {
               <div> {vendor.country}</div>
             </Desc>
             <Desc>
-              <DescHead>Product ID:</DescHead>
-              <div>{currentID}</div>
+              <DescHead>Type:</DescHead>
+              <div> {item.category}</div>
             </Desc>
             <Desc>
-              <DescHead>Product ID:</DescHead>
-              <div>{currentID}</div>
+              <DescHead>Body location:</DescHead>
+              <div> {item.body_location}</div>
             </Desc>
           </Description>
 
-          {item.numInStock > 0 ? <div>In stock</div> : <div>Out of stock</div>}
-
           <QuantityButtons>
             <button
-              onClick={() => setQuantityBox(quantityBox - 1)}
+              onClick={() => addQuantity(quantityBox - 1)}
               disabled={
                 item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
               }
@@ -94,16 +100,24 @@ const BigItem = () => {
             </button>
             <Quantity
               value={quantityBox}
-              onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
+              onChange={(ev) => addQuantity(parseInt(ev.target.value))}
             />
             <button
-              onClick={() => setQuantityBox(quantityBox + 1)}
+              onClick={() => addQuantity(quantityBox + 1)}
               disabled={item.numInStock > 0 ? false : true}
             >
               +
             </button>
+            {item.numInStock > 0 ? (
+              <InStock>Article in stock</InStock>
+            ) : (
+              <div>Out of stock</div>
+            )}
           </QuantityButtons>
-          <Button disabled={item.numInStock > 0 ? false : true}>
+          <Button
+            disabled={item.numInStock > 0 ? false : true}
+            onClick={() => addToCart(item)}
+          >
             ADD TO CART
           </Button>
         </InfoBox>
@@ -151,7 +165,7 @@ const InfoBox = styled.div`
 const Name = styled.div`
   font-size: 1.8rem;
   font-weight: bold;
-  padding-bottom: 1rem;
+  padding-top: 1rem;
 `;
 const Vendor = styled(Link)`
   text-decoration: none;
@@ -165,7 +179,9 @@ const Vendor = styled(Link)`
 const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 500;
-  margin: 40px 0 20px 0;
+  margin-top: 1.5rem;
+  padding: 1.5rem 0 20px 0;
+  border-top: 1px solid #dddddd;
 `;
 
 const Button = styled.button`
@@ -173,7 +189,7 @@ const Button = styled.button`
   border: 2px solid black;
   padding: 1rem;
   width: 50%;
-  margin: 10px 0;
+  margin-top: 2rem;
   font-size: 1.2rem;
   font-weight: 500;
   color: black;
@@ -197,17 +213,26 @@ const Quantity = styled.textarea`
   resize: none;
 `;
 const QuantityButtons = styled.div`
+  margin-top: 2rem;
   display: flex;
   align-items: center;
 `;
 
-const Description = styled.div``;
+const Description = styled.div`
+  padding-bottom: 2rem;
+`;
 const Desc = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 0.2rem 0;
 `;
 const DescHead = styled.div`
   font-weight: 500;
-  width: 100px;
+  width: 140px;
+`;
+const InStock = styled.div`
+  color: #75a3a3;
+  font-size: 1.2rem;
+  padding-left: 10px;
 `;
 export default BigItem;
