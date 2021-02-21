@@ -12,6 +12,7 @@ const {
   getCompanies,
   getProductSearch,
   getSearchArray,
+  getFilterResults,
   getTypehead,
 } = require('./handlers');
 
@@ -44,6 +45,7 @@ express()
   .get('/api/category/:categoryId', getCategory)
   .get('/api/product-details/:id', getProductInfo)
   .get('/api/companies', getCompanies)
+  .post('/api/filter', getFilterResults)
   .get('/api/search/:keyword', getProductSearch)
 
   // .get('/api/productsByIds', getProductsByIds)

@@ -2,6 +2,11 @@ const items = require('./data/items.json');
 const companies = require('./data/companies.json');
 const { v4: uuidv4 } = require('uuid');
 const e = require('express');
+const {
+  sort_LowToHigh,
+  sort_HighToLow,
+  sort_byId,
+} = require('./filterFunctions');
 
 // let SEARCHED = [];
 
@@ -133,6 +138,67 @@ const getProductSearch = (req, res) => {
   }
 };
 
+const getFilterResults = (req, res) => {
+  // Re-create the filtered items
+  // (from Categories or Search bar)
+  // With the list of all ids
+  let array = items.filter((item) => req.body.allIds.includes(item._id));
+
+  //Apply filters
+  let result = [];
+  result = array
+    .filter((item) => {
+      if (req.body.brandId.length > 0) {
+        return req.body.brandId.includes(item.companyId.toString());
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.price.start) {
+        return (
+          parseFloat(item.price.slice(1).replace(',', '')) >=
+          req.body.price.start
+        );
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.price.end) {
+        return (
+          parseFloat(item.price.slice(1).replace(',', '')) < req.body.price.end
+        );
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.stock === 'instock') {
+        return item.numInStock > 0;
+      } else if (req.body.stock === 'nostock') {
+        return item.numInStock === 0;
+      } else {
+        return item;
+      }
+    });
+
+  // Sort the final array of items
+  if (req.body.sorting === 'featured') {
+    result = sort_byId(result);
+  } else if (req.body.sorting === 'lowToHigh') {
+    result = sort_LowToHigh(result);
+  } else if (req.body.sorting === 'highToLow') {
+    result = sort_HighToLow(result);
+  }
+
+  res.status(200).json({
+    status: 200,
+    data: result,
+    message: 'Filter results',
+  });
+};
+
 module.exports = {
   getProducts,
   getAllUniqueCategories,
@@ -140,5 +206,6 @@ module.exports = {
   getCategory,
   getProductInfo,
   getCompanies,
+  getFilterResults,
   getProductSearch,
 };
