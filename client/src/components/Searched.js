@@ -5,7 +5,8 @@ import ReactPaginate from 'react-paginate';
 
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
-import FilterBox from './FilterBox';
+import FilterBox2 from './FilterBox2';
+import SmallCart from './SmallCart';
 
 const Searched = () => {
   const [items, setItems] = React.useState(null);
@@ -53,14 +54,14 @@ const Searched = () => {
     const offset = currentPage * itemsPerPage;
     const data = filteredItems.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(filteredItems.length / itemsPerPage);
-    //console.log(items, 'ITEMS');
     return (
       <Wrapper>
-        <FilterBox
+        <FilterBox2
           filteredItems={filteredItems}
           setFilteredItems={setFilteredItems}
           originalArray={items}
           setCurrentPage={setCurrentPage}
+          categoryId={categoryId}
         />
         <ItemsContainer>
           {data.map((item) => {

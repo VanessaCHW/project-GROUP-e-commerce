@@ -2,8 +2,10 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
+
+import SmallCart from './SmallCart';
 
 const BigItem = () => {
   let currentID = useParams().id;
@@ -36,51 +38,65 @@ const BigItem = () => {
   if (item && vendor) {
     return (
       <Wrapper>
-        <Content>
-          <ImgContainer>
-            <Img src={item.imageSrc} />
-          </ImgContainer>
-          <InfoBox>
-            <Name>{item.name}</Name>
-            <Vendor target="_blank" href={vendor.url}>
-              Visit the {vendor.name} website
-            </Vendor>
-            <hr />
-            <Tags>
-              <div>{item.category.toLowerCase()}</div>
-              <div>{item.body_location.toLowerCase()}</div>
-            </Tags>
-            <Price>{item.price.slice(1)} $</Price>
-            {item.numInStock > 0 ? (
-              <div>In stock</div>
-            ) : (
-              <div>Out of stock</div>
-            )}
-            <QuantityButtons>
-              <button
-                onClick={() => setQuantityBox(quantityBox - 1)}
-                disabled={
-                  item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
-                }
-              >
-                -
-              </button>
-              <Quantity
-                value={quantityBox}
-                onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
-              />
-              <button
-                onClick={() => setQuantityBox(quantityBox + 1)}
-                disabled={item.numInStock > 0 ? false : true}
-              >
-                +
-              </button>
-            </QuantityButtons>
-            <Button disabled={item.numInStock > 0 ? false : true}>
-              ADD TO CART
-            </Button>
-          </InfoBox>
-        </Content>
+        <ImgContainer>
+          <Img src={item.imageSrc} />
+        </ImgContainer>
+        <InfoBox>
+          <div>
+            <Link to="/">Home</Link> /{' '}
+            <Link to={`/category/{item.category}`}>{item.category}</Link>
+          </div>
+          <Name>{item.name}</Name>
+          <Vendor target="_blank" href={vendor.url}>
+            Visit the {vendor.name} website
+          </Vendor>
+          <Price>{item.price.slice(1)} $</Price>
+
+          <Description>
+            <Desc>
+              <DescHead>Brand:</DescHead>
+              <div> {vendor.name}</div>
+            </Desc>
+            <Desc>
+              <DescHead>Country:</DescHead>
+              <div> {vendor.country}</div>
+            </Desc>
+            <Desc>
+              <DescHead>Product ID:</DescHead>
+              <div>{currentID}</div>
+            </Desc>
+            <Desc>
+              <DescHead>Product ID:</DescHead>
+              <div>{currentID}</div>
+            </Desc>
+          </Description>
+
+          {item.numInStock > 0 ? <div>In stock</div> : <div>Out of stock</div>}
+
+          <QuantityButtons>
+            <button
+              onClick={() => setQuantityBox(quantityBox - 1)}
+              disabled={
+                item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
+              }
+            >
+              -
+            </button>
+            <Quantity
+              value={quantityBox}
+              onChange={(ev) => setQuantityBox(parseInt(ev.target.value))}
+            />
+            <button
+              onClick={() => setQuantityBox(quantityBox + 1)}
+              disabled={item.numInStock > 0 ? false : true}
+            >
+              +
+            </button>
+          </QuantityButtons>
+          <Button disabled={item.numInStock > 0 ? false : true}>
+            ADD TO CART
+          </Button>
+        </InfoBox>
       </Wrapper>
     );
   } else {
@@ -93,44 +109,38 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
+  position: absolute;
+  height: 100%;
   width: 100%;
-  nav {
-    border: 2px black solid;
-    height: 5%;
-  }
-  hr {
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    margin-bottom: 15px;
-  }
-`;
-
-const Content = styled.div`
-  width: 100%;
-  margin: auto;
   display: flex;
-  justify-content: center;
-  margin-top: 50px;
+  flex-direction: row;
 `;
 
 const ImgContainer = styled.div`
-  width: 400px;
-  height: 400px;
-  align-items: center;
+  position: relative;
+  height: 100%;
   justify-content: center;
+  align-items: start;
   display: flex;
-  overflow: hidden;
-  margin-right: 50px;
+  background-color: rgb(229, 229, 229);
+  flex: 3;
 `;
 const Img = styled.img`
   width: 100%;
+  padding: 100px 200px 0px 200px;
+  filter: brightness(90%);
 `;
 const InfoBox = styled.div`
-  width: 500px;
+  padding: 70px 30px 0px 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 2;
 `;
 const Name = styled.div`
   font-size: 1.8rem;
-  line-height: 2rem;
-  margin-bottom: 10px;
+  font-weight: bold;
+  padding-bottom: 1rem;
 `;
 const Vendor = styled.a`
   text-decoration: none;
@@ -138,17 +148,6 @@ const Vendor = styled.a`
   &:hover {
     color: #cca300;
     cursor: pointer;
-  }
-`;
-const Tags = styled.div`
-  display: flex;
-  flex-direction: row;
-  div {
-    background-color: #d1e0e0;
-    margin-right: 5px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    padding: 0 5px;
   }
 `;
 
@@ -159,20 +158,24 @@ const Price = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: black;
-  border-style: none;
-  color: white;
-  border: 1px solid black;
-  padding: 10px;
+  background-color: transparent;
+  border: 2px solid black;
+  padding: 1rem;
   width: 50%;
   margin: 10px 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black;
+  letter-spacing: 1px;
 
   &:hover {
     cursor: pointer;
-    background-color: gray;
+    &:enabled {
+      background: rgb(229, 229, 229);
+      transition: ease-in 0.1s;
+    }
     &:disabled {
       cursor: not-allowed;
-      background-color: black;
     }
   }
 `;
@@ -185,5 +188,15 @@ const Quantity = styled.textarea`
 const QuantityButtons = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const Description = styled.div``;
+const Desc = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+const DescHead = styled.div`
+  font-weight: 500;
+  width: 100px;
 `;
 export default BigItem;

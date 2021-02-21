@@ -11,6 +11,7 @@ const {
   getCompanies,
   addSearchArray,
   getSearchArray,
+  getFilterResults,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -43,6 +44,7 @@ express()
   .get('/api/companies', getCompanies)
   .post('/api/add-search-array', addSearchArray)
   .get('/api/searched/:searchedId', getSearchArray)
+  .post('/api/filter', getFilterResults)
 
   // Catch all endpoint
   .get('*', (req, res) =>
