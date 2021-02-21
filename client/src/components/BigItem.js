@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
+import { useDispatch } from 'react-redux';
+import { addItem } from './action';
 
 import SmallCart from './SmallCart';
 
@@ -13,6 +15,7 @@ const BigItem = () => {
   const { companies } = useContext(ProductsContext); //array of all companies
   const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
   const [quantityBox, setQuantityBox] = useState(0);
+  const dispatch = useDispatch();
 
   // Use the product ID to fetch all product data
   useEffect(() => {
@@ -25,7 +28,6 @@ const BigItem = () => {
         console.error('Unable to retrieve product details', error);
       });
   }, [currentID]);
-
   // Determine the vendor name by using a filter.
   // Using a hook for now because 'item' and 'companies' take time to load.
   useEffect(() => {
@@ -35,6 +37,14 @@ const BigItem = () => {
     }
   }, [item, companies]);
 
+  const addQuantity = (quantity) => {
+    setQuantityBox(quantity);
+  };
+
+  const addToCart = (item, qty) => {
+    const action = addItem({ ...item, quantity: quantityBox });
+    dispatch(action);
+  };
   if (item && vendor) {
     return (
       <Wrapper>
@@ -97,6 +107,7 @@ const BigItem = () => {
             ADD TO CART
           </Button>
         </InfoBox>
+        <SmallCart />
       </Wrapper>
     );
   } else {
@@ -142,7 +153,7 @@ const Name = styled.div`
   font-weight: bold;
   padding-bottom: 1rem;
 `;
-const Vendor = styled.a`
+const Vendor = styled(Link)`
   text-decoration: none;
   color: #629d9d;
   &:hover {

@@ -1,17 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
     <Wrapper>
       <Nav>
-        <a href="/category/fitness">Fitness</a>
-        <a href="/category/medical">Medical</a>
-        <a href="/category/lifestyle">Lifestyle</a>
-        <a href="/category/entertainment">Entertainment</a>
-        <a href="/category/pets-and-animals">Pets and Animals</a>
-        <a href="/category/gaming">Gaming</a>
-        <a href="/category/industrial">Industrial</a>
+        <StyledLink to="/category/fitness">Fitness</StyledLink>
+        <StyledLink to="/category/medical">Medical</StyledLink>
+        <StyledLink to="/category/lifestyle">Lifestyle</StyledLink>
+        <StyledLink to="/category/entertainment">Entertainment</StyledLink>
+        <StyledLink to="/category/pets-and-animals">Pets and Animals</StyledLink>
+        <StyledLink to="/category/gaming">Gaming</StyledLink>
+        <StyledLink to="/category/industrial">Industrial</StyledLink>
       </Nav>
     </Wrapper>
   );
@@ -24,13 +25,15 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: flex-start;
   }
-  a {
-    color: inherit;
+`;
+const Nav = styled.nav``;
+
+const StyledLink = styled(Link)`
+  color: inherit;
     text-decoration: none;
     border: solid 2px black;
     padding: 0 25px;
     margin: 0 10px;
-  }
 `;
-const Nav = styled.nav``;
+
 export default NavBar;
