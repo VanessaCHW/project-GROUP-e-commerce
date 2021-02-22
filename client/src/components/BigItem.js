@@ -57,7 +57,7 @@ const BigItem = () => {
             <Link to={`/category/{item.category}`}>{item.category}</Link>
           </div>
           <Name>{item.name}</Name>
-          <Vendor target="_blank" to={vendor.url}>
+          <Vendor target="_blank" href={vendor.url}>
             Visit the {vendor.name} website
           </Vendor>
           <Price>{item.price.slice(1)} $</Price>
@@ -109,9 +109,9 @@ const BigItem = () => {
               +
             </button>
             {item.numInStock > 0 ? (
-              <InStock>Article in stock</InStock>
+              <InStock>Article in stock ({item.numInStock})</InStock>
             ) : (
-              <div>Out of stock</div>
+              <OutOfStock>Out of stock</OutOfStock>
             )}
           </QuantityButtons>
           <Button
@@ -167,7 +167,7 @@ const Name = styled.div`
   font-weight: bold;
   padding-top: 1rem;
 `;
-const Vendor = styled(Link)`
+const Vendor = styled.a`
   text-decoration: none;
   color: #629d9d;
   &:hover {
@@ -232,6 +232,11 @@ const DescHead = styled.div`
 `;
 const InStock = styled.div`
   color: #75a3a3;
+  font-size: 1.2rem;
+  padding-left: 10px;
+`;
+const OutOfStock = styled.div`
+  color: #ff8080;
   font-size: 1.2rem;
   padding-left: 10px;
 `;
