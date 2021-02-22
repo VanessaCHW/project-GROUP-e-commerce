@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { ProductsContext } from './ProductsContext';
+import { useDispatch } from 'react-redux';
+import { clearCart } from './action';
 
 const Purchase = () => {
   const { setConfirmation } = useContext(ProductsContext);
@@ -11,6 +13,7 @@ const Purchase = () => {
   const [form, setFormValue] = useState({});
   const [error, setError] = useState(null);
   let history = useHistory();
+  const dispatch = useDispatch();
 
   // Calculate order total
   useEffect(() => {
@@ -48,6 +51,7 @@ const Purchase = () => {
         .then((res) => {
           if (res.status === 200) {
             setConfirmation(res.data);
+            dispatch(clearCart());
             history.push('./confirmation');
           } else {
             setError({ error: res.error, data: res.data });
