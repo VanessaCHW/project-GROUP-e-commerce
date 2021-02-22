@@ -54,8 +54,13 @@ const BigItem = () => {
         </ImgContainer>
         <InfoBox>
           <div>
-            <Link to="/">Home</Link> /{' '}
-            <Link to={`/category/{item.category}`}>{item.category}</Link>
+            <Link className="topLink" to="/">
+              Home
+            </Link>{' '}
+            ›{' '}
+            <Link className="topLink" to={`/category/{item.category}`}>
+              {item.category}
+            </Link>
           </div>
           <Name>{item.name}</Name>
           <Vendor target="_blank" href={vendor.url}>
@@ -91,7 +96,7 @@ const BigItem = () => {
           </Description>
 
           <QuantityButtons>
-            <button
+            <QtyButton
               onClick={() => {
                 if (quantityBox > 1) {
                   addQuantity(quantityBox - 1);
@@ -102,17 +107,17 @@ const BigItem = () => {
               }
             >
               -
-            </button>
+            </QtyButton>
             <Quantity
               value={quantityBox}
               onChange={(ev) => addQuantity(parseInt(ev.target.value))}
             />
-            <button
+            <QtyButton
               onClick={() => addQuantity(quantityBox + 1)}
               disabled={item.numInStock > 0 ? false : true}
             >
               +
-            </button>
+            </QtyButton>
             {item.numInStock > 0 ? (
               <InStock>Article in stock ({item.numInStock})</InStock>
             ) : (
@@ -126,7 +131,6 @@ const BigItem = () => {
             ADD TO CART
           </Button>
         </InfoBox>
-        <SmallCart />
       </Wrapper>
     );
   } else {
@@ -139,11 +143,18 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: row;
+  .topLink {
+    color: black;
+    text-decoration: none;
+    &:hover {
+      color: #cca300;
+      cursor: pointer;
+    }
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -156,8 +167,9 @@ const ImgContainer = styled.div`
   flex: 3;
 `;
 const Img = styled.img`
+  max-height: 90vh;
   width: 100%;
-  padding: 100px 200px 0px 200px;
+  padding: 10vh 15% 15% 15%;
   filter: brightness(90%);
 `;
 const InfoBox = styled.div`
@@ -175,6 +187,7 @@ const Name = styled.div`
 const Vendor = styled.a`
   text-decoration: none;
   color: #629d9d;
+  padding-top: 10px;
   &:hover {
     color: #cca300;
     cursor: pointer;
@@ -182,7 +195,7 @@ const Vendor = styled.a`
 `;
 
 const Price = styled.div`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 500;
   margin-top: 1.5rem;
   padding: 1.5rem 0 20px 0;
@@ -213,14 +226,23 @@ const Button = styled.button`
 `;
 const Quantity = styled.textarea`
   width: 40px;
-  height: 26px;
+  height: 40px;
   text-align: center;
   resize: none;
+  border: 1px solid black;
+  font-size: 1.3rem;
 `;
 const QuantityButtons = styled.div`
   margin-top: 2rem;
   display: flex;
   align-items: center;
+`;
+const QtyButton = styled.button`
+  background-color: transparent;
+  border: 1px solid #bfbfbf;
+  height: 40px;
+  width: 35px;
+  font-size: 1.5rem;
 `;
 
 const Description = styled.div`
@@ -233,7 +255,7 @@ const Desc = styled.div`
 `;
 const DescHead = styled.div`
   font-weight: 500;
-  width: 140px;
+  min-width: 140px;
 `;
 const InStock = styled.div`
   color: #75a3a3;
