@@ -193,11 +193,11 @@ const Purchase = () => {
           />
           {error ? (
             <div>
-              <div>Your order was not processed</div>
+              <div className="problem">Your order was not processed</div>
               {error.error === 'stock' ? (
-                <div>Please review your cart</div>
+                <div className="problem">Please review your cart</div>
               ) : (
-                <div>The form is incomplete</div>
+                <div className="problem">The form is incomplete</div>
               )}
             </div>
           ) : null}
@@ -242,6 +242,12 @@ const PurchaseBox = styled.div`
     flex-direction: row;
     justify-content: space-between;
     border-top: 2px solid #dddddd;
+  }
+  .problem {
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: red;
+    padding-top: 15px;
   }
 `;
 const Button = styled.input`
