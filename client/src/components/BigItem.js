@@ -41,10 +41,12 @@ const BigItem = () => {
     setQuantityBox(quantity);
   };
 
+
   const addToCart = (item, qty) => {
     const action = addItem({ ...item, quantity: quantityBox });
     dispatch(action);
   };
+
   if (item && vendor) {
     return (
       <Wrapper>

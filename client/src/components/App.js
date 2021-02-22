@@ -55,7 +55,7 @@ function App() {
             </Route>
           </Switch>
         </Body>
-        {/*<SmallCart />*/}
+        <SmallCart />
       </Main>
     </BrowserRouter>
   );

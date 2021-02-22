@@ -4,38 +4,39 @@ import { useDispatch } from 'react-redux'
 import { updateQuantity, removeItem } from './action'
 
 const CartItem = ({item ,id , quantity}) => {
-  // const [quantity, setQuantity] = useState(null)
   const dispatch = useDispatch();
 
   console.log(quantity, 'quantity in CartItem.js')
+
   const updateQuantityInCart = (id, quantity) => {
-  const addNumber = updateQuantity(id, quantity)
-      dispatch(addNumber)}
+    const actionUpdate = updateQuantity(id, quantity)
+      dispatch(actionUpdate)
+    }
 
-
-
-
-  // const removeItem = (item) => {
-  //   setQuantityBox(quantity)
-  // }
+  const removeItemInCart = (item) => {
+    const actionRemove = removeItem(id, item)
+      dispatch(actionRemove)
+    }
   // const addToCart = (item) => {
   //   const action = addItem(item)
   //   dispatch(action)
   // }
   console.log(item,"ITEM")
     return (
+      
+      
       <Wrapper>
+        
         <Content>
           <ImgContainer>
             <Img src={item.imageSrc} />
           </ImgContainer>
-          <InfoBox>
+            <InfoBox>
             <Name>{item.name}</Name>
             <CategoryTags>
               <div>{item.category}</div>
               <div>{item.body_location}</div>
             </CategoryTags>
-            <Price>{item.price}</Price>
             <QuantityButtons>
               <button
                 onClick={() => updateQuantityInCart(id, quantity - 1)}
@@ -55,24 +56,32 @@ const CartItem = ({item ,id , quantity}) => {
               >
                 +
               </button>
+              <DeleteButton onClick={() => removeItemInCart(id, item)}>Delete</DeleteButton>
+
             </QuantityButtons>
           </InfoBox>
+          <Price>{item.price}</Price>
         </Content>
       </Wrapper>
+
     );
   } 
 
 
 const Wrapper = styled.div`
-  width: 100%;
+width:100%;
+  justify-content: center;
 `;
 
 const Content = styled.div`
-  width: 100%;
-  margin: auto;
+  
+ 
   display: flex;
-  justify-content: center;
-  margin-top: 50px;
+  justify-content: space-between;
+  margin-top: 40px;
+  border-bottom:2px solid lightgray;
+  padding-bottom:20px;
+  margin-bottom:20px;
 `;
 
 const ImgContainer = styled.div`
@@ -82,7 +91,8 @@ const ImgContainer = styled.div`
   justify-content: center;
   display: flex;
   overflow: hidden;
-  margin-right: 50px;
+margin:30px;
+margin-right:0;
 `;
 const Img = styled.img`
   width: 100%;
@@ -91,14 +101,16 @@ const InfoBox = styled.div`
   width: 500px;
 `;
 const Name = styled.div`
-  font-size: 1.8rem;
-  line-height: 2rem;
-  margin-bottom: 10px;
+  font-size: 25px;
+  /* line-height: 10px; */
+  margin-bottom: 20px;
+  font-weight:bold;
 `;
 
 const CategoryTags = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom:10px;
   div {
     background-color: #d1e0e0;
     margin-right: 5px;
@@ -108,22 +120,29 @@ const CategoryTags = styled.div`
   }
 `;
 
-const Price = styled.div`
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 40px 0 20px 0;
-`;
 
 const QuantityButtons = styled.div`
   display: flex;
   align-items: center;
 `;
 
+const DeleteButton = styled.button`
+    margin-left:10px;
+`;
+
+
 const Quantity = styled.textarea`
   width: 40px;
   height: 26px;
   text-align: center;
   resize: none;
+`;
+
+const Price = styled.div`
+  font-size: 25px;
+  font-weight: 500;
+  
+  /* margin-left: 50px ; */
 `;
 
 export default CartItem;
