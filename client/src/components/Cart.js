@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 // import { getItems } from '../reducers/cartReducer';
 import CartItem from './CartItem';
-
 
 const Cart = () => {
     const storeItems = useSelector((state) => state);
@@ -39,9 +39,8 @@ const Cart = () => {
             </PurchasingSection>
         </Container>
     </Wrapper>
-);
+  );
 };
-
 
 const Wrapper = styled.div`
     margin:auto;
@@ -78,7 +77,6 @@ const PurchaseButton = styled.button`
 const Total = styled.div`
     display:flex;
     font-size: 22px;
-
 `;
 
 export default Cart;

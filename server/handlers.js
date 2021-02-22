@@ -2,6 +2,11 @@ const items = require('./data/items.json');
 const companies = require('./data/companies.json');
 const { v4: uuidv4 } = require('uuid');
 const e = require('express');
+const {
+  sort_LowToHigh,
+  sort_HighToLow,
+  sort_byId,
+} = require('./filterFunctions');
 
 // let SEARCHED = [];
 
@@ -133,6 +138,126 @@ const getProductSearch = (req, res) => {
   }
 };
 
+const getFilterResults = (req, res) => {
+  // Re-create the filtered items
+  // (from Categories or Search bar)
+  // With the list of all ids
+  let array = items.filter((item) => req.body.allIds.includes(item._id));
+
+  //Apply filters
+  let result = [];
+  result = array
+    .filter((item) => {
+      if (req.body.brandId.length > 0) {
+        return req.body.brandId.includes(item.companyId.toString());
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.price.start) {
+        return (
+          parseFloat(item.price.slice(1).replace(',', '')) >=
+          req.body.price.start
+        );
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.price.end) {
+        return (
+          parseFloat(item.price.slice(1).replace(',', '')) < req.body.price.end
+        );
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (req.body.stock === 'instock') {
+        return item.numInStock > 0;
+      } else if (req.body.stock === 'nostock') {
+        return item.numInStock === 0;
+      } else {
+        return item;
+      }
+    });
+
+  // Sort the final array of items
+  if (req.body.sorting === 'featured') {
+    result = sort_byId(result);
+  } else if (req.body.sorting === 'lowToHigh') {
+    result = sort_LowToHigh(result);
+  } else if (req.body.sorting === 'highToLow') {
+    result = sort_HighToLow(result);
+  }
+
+  res.status(200).json({
+    status: 200,
+    data: result,
+    message: 'Filter results',
+  });
+};
+
+const handlePurchase = (req, res) => {
+  let confirmeditems = [];
+  let rejecteditems = [];
+  let requestedItems = req.body.items;
+  let form = req.body.form;
+  let formError = false;
+
+  //Compare numinStock with qty requested
+  requestedItems.map((item) => {
+    let stockItem = items.filter((product) => product._id === item.id);
+    if (stockItem[0].numInStock >= item.qty && item.qty > 0) {
+      confirmeditems.push(item);
+    } else {
+      rejecteditems.push({
+        name: stockItem[0].name,
+        stock: stockItem[0].numInStock,
+        requested: item.qty,
+      });
+    }
+  });
+
+  if (rejecteditems.length === 0 && formError === false) {
+    requestedItems.map((item) => {
+      let index = items.findIndex((product) => product._id === item.id);
+      items[index].numInStock = items[index].numInStock - item.qty;
+    });
+  }
+
+  if (Object.values(form).length != 10) {
+    formError = true;
+  }
+
+  if (formError) {
+    res.status(404).json({
+      status: 404,
+      error: 'form',
+      data: form,
+    });
+  } else if (rejecteditems.length > 0) {
+    res.status(404).json({
+      status: 404,
+      error: 'stock',
+      data: rejecteditems,
+    });
+  } else {
+    let randomID = { id: uuidv4() };
+    delete form.expiration;
+    delete form.credit;
+    delete form.cvv;
+    let confirmation = { ...randomID, items: confirmeditems, form: form };
+
+    res.status(200).json({
+      status: 200,
+      data: confirmation,
+      message: 'Transaction processed',
+    });
+  }
+};
+
 module.exports = {
   getProducts,
   getAllUniqueCategories,
@@ -140,5 +265,7 @@ module.exports = {
   getCategory,
   getProductInfo,
   getCompanies,
+  getFilterResults,
   getProductSearch,
+  handlePurchase,
 };

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
-import FilterBox from './FilterBox';
+import FilterBox2 from './FilterBox2';
+import SmallCart from './SmallCart';
 import { SearchContext } from './SearchContext';
 
 const Searched = () => {
@@ -18,6 +19,12 @@ const Searched = () => {
     setCurrentPage(selectedPage);
   }
 
+  useEffect(() => {
+    if (searchStatus === 'idle') {
+      setFilteredItems(products);
+    }
+  }, [products, searchStatus]);
+
   if (searchStatus === 'loading') {
     return <div>Loading...</div>;
   } else {
@@ -26,11 +33,9 @@ const Searched = () => {
     const offset = currentPage * itemsPerPage;
     const data = filteredItems.slice(offset, offset + itemsPerPage);
     const numPages = Math.ceil(filteredItems.length / itemsPerPage);
-    // setFilteredItems(products);
-
     return (
       <Wrapper>
-        <FilterBox
+        <FilterBox2
           filteredItems={filteredItems}
           setFilteredItems={setFilteredItems}
           originalArray={products}
@@ -58,6 +63,7 @@ const Searched = () => {
             />
           </Pagination>
         </ItemsContainer>
+        <SmallCart />
       </Wrapper>
     );
   }
