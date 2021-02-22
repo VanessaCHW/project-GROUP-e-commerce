@@ -14,7 +14,7 @@ const BigItem = () => {
   const [item, setItem] = useState(null);
   const { companies } = useContext(ProductsContext); //array of all companies
   const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
-  const [quantityBox, setQuantityBox] = useState(0);
+  const [quantityBox, setQuantityBox] = useState(1);
   const dispatch = useDispatch();
 
   // Use the product ID to fetch all product data
@@ -40,7 +40,6 @@ const BigItem = () => {
   const addQuantity = (quantity) => {
     setQuantityBox(quantity);
   };
-
 
   const addToCart = (item, qty) => {
     const action = addItem({ ...item, quantity: quantityBox });
@@ -93,7 +92,11 @@ const BigItem = () => {
 
           <QuantityButtons>
             <button
-              onClick={() => addQuantity(quantityBox - 1)}
+              onClick={() => {
+                if (quantityBox > 1) {
+                  addQuantity(quantityBox - 1);
+                }
+              }}
               disabled={
                 item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
               }
