@@ -144,7 +144,7 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -213,6 +213,8 @@ const Button = styled.button`
   font-weight: 500;
   color: black;
   letter-spacing: 1px;
+  /* :active {
+      transform: translateY(3px);} */
 
   &:hover {
     cursor: pointer;

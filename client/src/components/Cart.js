@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-// import { getItems } from '../reducers/cartReducer';
 import CartItem from './CartItem';
 
 const Cart = () => {
-  const storeItems = useSelector((state) => state);
-  //     let total = 0;
-  //   storeItems.map((item) => (total += item.quantity * item.price));
-  //   let formatedPrice = new Intl.NumberFormat("en-US", {
-  //     style: "currency",
-  //     currency: "USD",
-  //   }).format(total / 100);
+    const storeItems = useSelector((state) => state);
+    const [total, setTotal] = useState()
+
+    useEffect(() => {
+        if (storeItems) {
+          let sum = 0;
+          Object.values(storeItems).map((item) => {
+            sum += item.price.slice(1).replace(',', '') * item.quantity;
+          });
+          setTotal(sum.toFixed(2));
+        }
+      }, [storeItems]);
+
 
   return (
     <Wrapper>
@@ -36,8 +41,7 @@ const Cart = () => {
             Purchase
           </PurchaseButton>
           <Total>
-            Total: <b>$0.00</b>
-            {/* {total > 0 ? <b>{formatedPrice}</b> : <b>$0.00</b>} */}
+            ${total}
           </Total>
         </PurchasingSection>
       </Container>
@@ -74,11 +78,15 @@ const PurchaseButton = styled(Link)`
   border: 1px solid black;
   text-decoration: none;
   text-align: center;
+  :active {
+      transform: translateY(3px);}
 `;
 
 const Total = styled.div`
   display: flex;
   font-size: 22px;
+  font-weight:bold;
+
 `;
 
 export default Cart;

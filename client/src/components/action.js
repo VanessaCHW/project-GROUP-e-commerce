@@ -3,9 +3,10 @@ export const addItem = (item) => ({
   item,
 });
 
-export const removeItem = (item) => ({
+export const removeItem = (_id, item) => ({
   type: 'REMOVE_ITEM',
   item,
+  _id,
 });
 
 export const updateQuantity = (_id, quantity) => ({

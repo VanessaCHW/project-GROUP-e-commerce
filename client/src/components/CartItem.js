@@ -13,7 +13,7 @@ const CartItem = ({item ,id , quantity}) => {
       dispatch(actionUpdate)
     }
 
-  const removeItemInCart = (item) => {
+  const removeItemInCart = (id, item) => {
     const actionRemove = removeItem(id, item)
       dispatch(actionRemove)
     }
@@ -37,28 +37,28 @@ const CartItem = ({item ,id , quantity}) => {
               <div>{item.category}</div>
               <div>{item.body_location}</div>
             </CategoryTags>
-            <QuantityButtons>
-              <button
+            <QuantityDiv>
+              <QuantityButton
                 onClick={() => updateQuantityInCart(id, quantity - 1)}
                 disabled={
                   item.numInStock > 0 ? (quantity > 0 ? false : true) : true
                 }
               >
                 -
-              </button>
+              </QuantityButton>
               <Quantity
                 value={quantity}
                 onChange={(ev) => updateQuantityInCart(id, parseInt(ev.target.value))}
               />
-              <button  // => dispatch(updateQuantity({quantity}))
+              <QuantityButton  // => dispatch(updateQuantity({quantity}))
                 onClick={() => updateQuantityInCart(id, quantity+ 1)}
                 disabled={item.numInStock > 0 ? false : true}
               >
                 +
-              </button>
+              </QuantityButton>
               <DeleteButton onClick={() => removeItemInCart(id, item)}>Delete</DeleteButton>
 
-            </QuantityButtons>
+            </QuantityDiv>
           </InfoBox>
           <Price>{item.price}</Price>
         </Content>
@@ -121,21 +121,33 @@ const CategoryTags = styled.div`
 `;
 
 
-const QuantityButtons = styled.div`
+const QuantityDiv= styled.div`
   display: flex;
   align-items: center;
 `;
 
-const DeleteButton = styled.button`
-    margin-left:10px;
+const QuantityButton = styled.button`
+  background-color: transparent;
+  border: 1px solid #bfbfbf;
+  height: 30px;
+  width: 30px;
+  /* font-size: 1.5rem; */
 `;
 
-
 const Quantity = styled.textarea`
-  width: 40px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   text-align: center;
   resize: none;
+  border: 1px solid black;
+  font-size: 0.9rem;
+`;
+
+const DeleteButton = styled.button`
+    margin-left:10px;
+    height:30px;
+    :active {
+      transform: translateY(3px);}
 `;
 
 const Price = styled.div`
