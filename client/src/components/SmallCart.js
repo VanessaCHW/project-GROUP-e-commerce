@@ -1,43 +1,46 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState,  useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const SmallCart = () => {
-  const [items, setItems] = useState(null);
-  const [status, setStatus] = useState('loading');
+  const storeItems = useSelector((state) => state);
+  const [total, setTotal] = useState(0);
+  // const [status, setStatus] = useState('loading');
+
   useEffect(() => {
-    fetch('/api/someproducts')
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json.data);
-        setStatus('idle');
+    if (storeItems) {
+      let sum = 0;
+      Object.values(storeItems).map((item) => {
+        sum += item.price.slice(1).replace(',', '') * item.quantity;
       });
-  }, []);
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
+      setTotal(sum.toFixed(2));
+    }
+  }, [storeItems]);
+
+  // if (status === 'loading') {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <Container>
       <Div>
-        <h3>Currently in your cart:</h3>
+        {/* <h3>Currently in your cart:</h3> */}
         <Subtotal>
           <p>Subtotal</p>
-          <span>$00.00</span>
+          <span>${total}</span>
         </Subtotal>
-        {items.map((item) => {
-          return (
+        {Object.values(storeItems).map((item) => (
             <SmallCartDiv to={`/product/${item._id}`}>
               <SmallCartImgHelper>
                 <SmallCartImg src={item.imageSrc} />
               </SmallCartImgHelper>
-              <SmallCartInfo>
+              {/* <SmallCartInfo>
                 <SmallCartName>{item.name.substring(0, 17)}... </SmallCartName>
                 <SmallCartPrice>{item.price}</SmallCartPrice>
-                <SmallCartQuantity>Quantity: 1</SmallCartQuantity>
-              </SmallCartInfo>
+                <SmallCartQuantity>Quantity: {item.quantity}</SmallCartQuantity>
+              </SmallCartInfo> */}
             </SmallCartDiv>
-          );
-        })}
+        ))}
       </Div>
     </Container>
   );
@@ -51,7 +54,7 @@ const Container = styled.div`
   position: sticky;
   top: 0;
   z-index: 10;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   h3 {
     font-weight: 500;
   }
@@ -78,7 +81,7 @@ const Subtotal = styled.div`
 const SmallCartImgHelper = styled.div`
   height: 129px;
   width: 122px;
-  margin: 10px;
+  /* margin: 10px; */
   display: flex;
   align-items: center;
 `;
@@ -96,7 +99,9 @@ const SmallCartQuantity = styled.p``;
 const SmallCartDiv = styled(Link)`
   display: flex;
   padding: 10px;
-  width: 310px;
+  width: 150px;
+  margin-left:10px;
+  margin-bottom:20px;
   text-decoration: none;
   align-items: center;
   /* margin: 5px; */
