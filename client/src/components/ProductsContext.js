@@ -9,6 +9,8 @@ export const ProductsProvider = ({ children }) => {
   const [companies, setCompanies] = useState(null);
   const [companiesStatus, setCompaniesStatus] = useState('loading');
 
+  const [purchaseConfirmation, setConfirmation] = useState(null);
+
   // Returns an array of ALL products
   useEffect(() => {
     setProductsStatus('loading');
@@ -50,6 +52,8 @@ export const ProductsProvider = ({ children }) => {
         productsStatus,
         companies,
         companiesStatus,
+        purchaseConfirmation,
+        setConfirmation,
       }}
     >
       {children}

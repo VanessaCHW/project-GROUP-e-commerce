@@ -184,7 +184,7 @@ const FilterBox2 = ({ filteredItems, setFilteredItems, setCurrentPage }) => {
   }
 };
 const Wrapper = styled.div`
-  width: 265px;
+  width: 230px;
   box-sizing: content-box;
   border-right: 2px solid #dddddd;
   margin: 0 15px;

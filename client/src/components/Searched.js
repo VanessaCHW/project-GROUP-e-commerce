@@ -6,7 +6,6 @@ import ReactPaginate from 'react-paginate';
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
 import FilterBox2 from './FilterBox2';
-import SmallCart from './SmallCart';
 import { SearchContext } from './SearchContext';
 
 const Searched = () => {
@@ -63,7 +62,6 @@ const Searched = () => {
             />
           </Pagination>
         </ItemsContainer>
-        <SmallCart />
       </Wrapper>
     );
   }

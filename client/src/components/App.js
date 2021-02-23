@@ -11,6 +11,8 @@ import Searched from './Searched';
 import SmallCart from './SmallCart';
 import Cart from './Cart';
 import BigItem from './BigItem';
+import Purchase from './Purchase';
+import Confirmation from './Confirmation';
 
 function App() {
   const { products, productsStatus } = React.useContext(ProductsContext);
@@ -45,9 +47,15 @@ function App() {
             <Route exact path="/cart">
               <Cart />
             </Route>
+            <Route exact path="/purchase">
+              <Purchase />
+            </Route>
+            <Route exact path="/confirmation">
+              <Confirmation />
+            </Route>
           </Switch>
         </Body>
-        {/*<SmallCart />*/}
+        <SmallCart />
       </Main>
     </BrowserRouter>
   );

@@ -228,6 +228,7 @@ const CartButton = styled(Link)`
   text-align: center;
   width: 50px;
   height: 30px;
+  margin-right:20px;
 `;
 
 export default Typehead;

@@ -14,7 +14,7 @@ const BigItem = () => {
   const [item, setItem] = useState(null);
   const { companies } = useContext(ProductsContext); //array of all companies
   const [vendor, setVendor] = useState(null); //to be displayed on page after filtering
-  const [quantityBox, setQuantityBox] = useState(0);
+  const [quantityBox, setQuantityBox] = useState(1);
   const dispatch = useDispatch();
 
   // Use the product ID to fetch all product data
@@ -45,6 +45,7 @@ const BigItem = () => {
     const action = addItem({ ...item, quantity: quantityBox });
     dispatch(action);
   };
+
   if (item && vendor) {
     return (
       <Wrapper>
@@ -53,11 +54,16 @@ const BigItem = () => {
         </ImgContainer>
         <InfoBox>
           <div>
-            <Link to="/">Home</Link> /{' '}
-            <Link to={`/category/{item.category}`}>{item.category}</Link>
+            <Link className="topLink" to="/">
+              Home
+            </Link>{' '}
+            ›{' '}
+            <Link className="topLink" to={`/category/{item.category}`}>
+              {item.category}
+            </Link>
           </div>
           <Name>{item.name}</Name>
-          <Vendor target="_blank" to={vendor.url}>
+          <Vendor target="_blank" href={vendor.url}>
             Visit the {vendor.name} website
           </Vendor>
           <Price>{item.price.slice(1)} $</Price>
@@ -90,28 +96,32 @@ const BigItem = () => {
           </Description>
 
           <QuantityButtons>
-            <button
-              onClick={() => addQuantity(quantityBox - 1)}
+            <QtyButton
+              onClick={() => {
+                if (quantityBox > 1) {
+                  addQuantity(quantityBox - 1);
+                }
+              }}
               disabled={
                 item.numInStock > 0 ? (quantityBox > 0 ? false : true) : true
               }
             >
               -
-            </button>
+            </QtyButton>
             <Quantity
               value={quantityBox}
               onChange={(ev) => addQuantity(parseInt(ev.target.value))}
             />
-            <button
+            <QtyButton
               onClick={() => addQuantity(quantityBox + 1)}
               disabled={item.numInStock > 0 ? false : true}
             >
               +
-            </button>
+            </QtyButton>
             {item.numInStock > 0 ? (
-              <InStock>Article in stock</InStock>
+              <InStock>Article in stock ({item.numInStock})</InStock>
             ) : (
-              <div>Out of stock</div>
+              <OutOfStock>Out of stock</OutOfStock>
             )}
           </QuantityButtons>
           <Button
@@ -121,7 +131,6 @@ const BigItem = () => {
             ADD TO CART
           </Button>
         </InfoBox>
-        <SmallCart />
       </Wrapper>
     );
   } else {
@@ -134,11 +143,18 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: row;
+  .topLink {
+    color: black;
+    text-decoration: none;
+    &:hover {
+      color: #cca300;
+      cursor: pointer;
+    }
+  }
 `;
 
 const ImgContainer = styled.div`
@@ -151,8 +167,9 @@ const ImgContainer = styled.div`
   flex: 3;
 `;
 const Img = styled.img`
+  max-height: 90vh;
   width: 100%;
-  padding: 100px 200px 0px 200px;
+  padding: 10vh 15% 15% 15%;
   filter: brightness(90%);
 `;
 const InfoBox = styled.div`
@@ -167,9 +184,10 @@ const Name = styled.div`
   font-weight: bold;
   padding-top: 1rem;
 `;
-const Vendor = styled(Link)`
+const Vendor = styled.a`
   text-decoration: none;
   color: #629d9d;
+  padding-top: 10px;
   &:hover {
     color: #cca300;
     cursor: pointer;
@@ -177,7 +195,7 @@ const Vendor = styled(Link)`
 `;
 
 const Price = styled.div`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 500;
   margin-top: 1.5rem;
   padding: 1.5rem 0 20px 0;
@@ -208,14 +226,23 @@ const Button = styled.button`
 `;
 const Quantity = styled.textarea`
   width: 40px;
-  height: 26px;
+  height: 40px;
   text-align: center;
   resize: none;
+  border: 1px solid black;
+  font-size: 1.3rem;
 `;
 const QuantityButtons = styled.div`
   margin-top: 2rem;
   display: flex;
   align-items: center;
+`;
+const QtyButton = styled.button`
+  background-color: transparent;
+  border: 1px solid #bfbfbf;
+  height: 40px;
+  width: 35px;
+  font-size: 1.5rem;
 `;
 
 const Description = styled.div`
@@ -228,10 +255,15 @@ const Desc = styled.div`
 `;
 const DescHead = styled.div`
   font-weight: 500;
-  width: 140px;
+  min-width: 140px;
 `;
 const InStock = styled.div`
   color: #75a3a3;
+  font-size: 1.2rem;
+  padding-left: 10px;
+`;
+const OutOfStock = styled.div`
+  color: #ff8080;
   font-size: 1.2rem;
   padding-left: 10px;
 `;

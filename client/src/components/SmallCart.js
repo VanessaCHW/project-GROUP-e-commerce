@@ -47,7 +47,9 @@ const Container = styled.div`
   height: 100%;
   border: solid 2px black;
   position: sticky;
-        top: 0;
+  top: 0;
+  z-index:10;
+  margin-left:20px;
 `;
 
 const Div = styled.div`

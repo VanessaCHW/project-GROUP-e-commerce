@@ -14,6 +14,7 @@ const {
   getSearchArray,
   getFilterResults,
   getTypehead,
+  handlePurchase,
 } = require('./handlers');
 
 const PORT = 4000;
@@ -47,6 +48,7 @@ express()
   .get('/api/companies', getCompanies)
   .post('/api/filter', getFilterResults)
   .get('/api/search/:keyword', getProductSearch)
+  .post('/api/purchase', handlePurchase)
 
   // .get('/api/productsByIds', getProductsByIds)
   //products?size=50
