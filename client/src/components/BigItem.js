@@ -131,6 +131,7 @@ const BigItem = () => {
             ADD TO CART
           </Button>
         </InfoBox>
+        <SmallCart />
       </Wrapper>
     );
   } else {
