@@ -12,6 +12,7 @@ const Purchase = () => {
   const [total, setTotal] = useState(0);
   const [form, setFormValue] = useState({});
   const [error, setError] = useState(null);
+  const [formError, setFormError] = useState(null);
   let history = useHistory();
   const dispatch = useDispatch();
 
@@ -26,6 +27,22 @@ const Purchase = () => {
     }
   }, [storeItems]);
 
+  const formVerification = () => {
+    if (form.name) {
+      if (!form.name.includes(' ')) {
+        setFormError('Please include full name');
+        return false;
+      }
+    } else {
+      setFormError('Please include full name');
+      return false;
+    }
+    if (isNaN(parseInt(form.credit))) {
+      setFormError('Please enter credit cart number');
+      return false;
+    }
+  };
+
   const handleFormChange = (fieldName, value) => {
     setFormValue({ ...form, [fieldName]: value });
   };
@@ -33,7 +50,9 @@ const Purchase = () => {
   const handleSubmit = (ev) => {
     ev.preventDefault();
 
-    if (storeItems) {
+    let noError = formVerification();
+
+    if (storeItems && noError) {
       let data = Object.values(storeItems).map((item) => {
         return { id: item._id, qty: item.quantity };
       });
@@ -51,6 +70,7 @@ const Purchase = () => {
         .then((res) => {
           if (res.status === 200) {
             setConfirmation(res.data);
+            setFormError(null);
             dispatch(clearCart());
             history.push('./confirmation');
           } else {
@@ -63,6 +83,7 @@ const Purchase = () => {
 
   return (
     <Wrapper>
+      <div className="pageTitle">Review your order</div>
       <form className="theForm">
         <div>
           <Section>
@@ -123,14 +144,14 @@ const Purchase = () => {
               />
             </Label>
             <Label>
-              <LabelTitle className="country">Country</LabelTitle>
+              <LabelTitle>Country</LabelTitle>
               <div className="country">Canada</div>
             </Label>
             <Label>
               <LabelTitle>Email</LabelTitle>
               <Input
                 required
-                type="text"
+                type="email"
                 onChange={(ev) => handleFormChange('email', ev.target.value)}
               />
             </Label>
@@ -191,10 +212,18 @@ const Purchase = () => {
         <PurchaseBox>
           <Button
             type="submit"
-            disabled={total > 0 ? false : true}
+            disabled={
+              total > 0 && Object.values(form).length === 10 ? false : true
+            }
             onClick={(ev) => handleSubmit(ev)}
             value="Place your order"
           />
+          {formError ? (
+            <div>
+              <div className="problem">Your order was not processed</div>
+              <div className="formProblem">{formError}</div>
+            </div>
+          ) : null}
           {error ? (
             <div>
               <div className="problem">Your order was not processed</div>
@@ -253,6 +282,11 @@ const PurchaseBox = styled.div`
     color: red;
     padding-top: 15px;
   }
+  .formProblem {
+    font-style: italic;
+    color: #990000;
+    padding-bottom: 1rem;
+  }
 `;
 const Button = styled.input`
   font-size: 1.2rem;
@@ -269,8 +303,16 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: flex-start;
   }
+  .pageTitle {
+    font-size: 2rem;
+    width: 1130px;
+    margin: auto;
+    padding: 1.2rem 0 0.5rem 0;
+    font-weight: 500;
+  }
   .Title {
     font-size: 1.2rem;
+    font-weight: 500;
     padding: 10px;
   }
   .country {
@@ -287,7 +329,7 @@ const Wrapper = styled.div`
 `;
 const Section = styled.div`
   border: 1px solid #dddddd;
-  width: 750px;
+  width: 800px;
   margin: 10px auto;
   display: flex;
   flex-direction: column;
