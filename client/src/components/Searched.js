@@ -97,14 +97,13 @@ const Pagination = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  font-weight: 500;
 
   .pagination {
     display: flex;
     flex-direction: row;
     list-style: none;
     padding: 0;
-    margin-bottom: 40px;
-
     .activeLink a {
       width: 100%;
       height: 100%;
@@ -113,9 +112,13 @@ const Pagination = styled.div`
     }
   }
   .pagination a {
-    border: 1px solid black;
-    padding: 10px 20px;
-    margin: 2px;
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    &:hover {
+      background-color: #b3cccc;
+      cursor: pointer;
+    }
   }
 `;
 export default Searched;
