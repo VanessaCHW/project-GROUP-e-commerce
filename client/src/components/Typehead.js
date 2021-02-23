@@ -32,8 +32,12 @@ const Typehead = () => {
   };
 
   const handleSearch = () => {
-    searchByKeyword(searchValue);
-    history.push('/searched');
+    if (searchValue > 0) {
+      searchByKeyword(searchValue);
+      history.push('/searched');
+    } else {
+      return;
+    }
   };
 
   const handleCartClick = () => {
@@ -195,6 +199,10 @@ const Wrapper = styled.div`
       outline: none;
       border: none;
       border-radius: 0 15px 15px 0;
+
+      &:hover {
+        box-shadow: 0 0 5px 3px #888;
+      }
     }
     ul {
       width: 100%;
