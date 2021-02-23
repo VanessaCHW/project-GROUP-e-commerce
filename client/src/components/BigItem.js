@@ -144,7 +144,7 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
-  height: calc(100vh - 142px);
+  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: row;
