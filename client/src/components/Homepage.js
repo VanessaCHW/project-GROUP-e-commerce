@@ -54,7 +54,8 @@ const Homepage = () => {
 
 const Wrapper = styled.div``;
 const ItemsContainer = styled.div`
-  border: solid 2px blue;
+  border-top: solid 2px #dddddd;
+  margin: 50px 20px;
 
   /* .container {
     display: flex;

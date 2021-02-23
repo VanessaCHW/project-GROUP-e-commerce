@@ -13,6 +13,9 @@ export const SearchProvider = ({ children }) => {
   const [searchStatus, setSearchStatus] = useState('idle');
   const [searchUrl, setSearchUrl] = useState(productSearchUrl.all);
 
+  const searchAll = () => {
+    setSearchUrl(productSearchUrl.all);
+  };
   const searchByCategory = (category) => {
     setSearchUrl(`${productSearchUrl.category}${category}`);
   };
@@ -47,6 +50,7 @@ export const SearchProvider = ({ children }) => {
         actions: {
           searchByCategory,
           searchByKeyword,
+          searchAll,
         },
       }}
     >

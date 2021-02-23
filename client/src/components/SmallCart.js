@@ -19,7 +19,7 @@ const SmallCart = () => {
   return (
     <Container>
       <Div>
-        <h3>Currently in your cart</h3>
+        <h3>Currently in your cart:</h3>
         <Subtotal>
           <p>Subtotal</p>
           <span>$00.00</span>
@@ -27,7 +27,9 @@ const SmallCart = () => {
         {items.map((item) => {
           return (
             <SmallCartDiv to={`/product/${item._id}`}>
-              <SmallCartImg src={item.imageSrc} />
+              <SmallCartImgHelper>
+                <SmallCartImg src={item.imageSrc} />
+              </SmallCartImgHelper>
               <SmallCartInfo>
                 <SmallCartName>{item.name.substring(0, 17)}... </SmallCartName>
                 <SmallCartPrice>{item.price}</SmallCartPrice>
@@ -45,11 +47,14 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   height: 100%;
-  border: solid 2px black;
+  border-left: solid 2px #dddddd;
   position: sticky;
   top: 0;
-  z-index:10;
-  margin-left:20px;
+  z-index: 10;
+  margin-left: 20px;
+  h3 {
+    font-weight: 500;
+  }
 `;
 
 const Div = styled.div`
@@ -70,11 +75,16 @@ const Subtotal = styled.div`
   }
 `;
 
-const SmallCartImg = styled.img`
-  width: 100px;
-  height: 100px;
+const SmallCartImgHelper = styled.div`
+  height: 129px;
+  width: 122px;
   margin: 10px;
-  aspect-ratio: auto 100 / 100;
+  display: flex;
+  align-items: center;
+`;
+const SmallCartImg = styled.img`
+  width: 100%;
+  height: auto;
 `;
 
 const SmallCartName = styled.p``;
@@ -88,6 +98,7 @@ const SmallCartDiv = styled(Link)`
   padding: 10px;
   width: 310px;
   text-decoration: none;
+  align-items: center;
   /* margin: 5px; */
 `;
 

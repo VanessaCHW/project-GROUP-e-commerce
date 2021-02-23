@@ -8,7 +8,6 @@ import Typehead from './Typehead';
 import NavBar from './NavBar';
 import Homepage from './Homepage';
 import Searched from './Searched';
-import SmallCart from './SmallCart';
 import Cart from './Cart';
 import BigItem from './BigItem';
 import Purchase from './Purchase';
@@ -33,10 +32,8 @@ function App() {
             <Route exact path="/">
               <Homepage />
             </Route>
-            {/*Route for searched items*/}
             <Route exact path="/searched">
               <Searched />
-              {/* <Homepage /> */}
             </Route>
             <Route exact path="/category/:categoryId">
               <Searched />
@@ -55,7 +52,6 @@ function App() {
             </Route>
           </Switch>
         </Body>
-        <SmallCart />
       </Main>
     </BrowserRouter>
   );
