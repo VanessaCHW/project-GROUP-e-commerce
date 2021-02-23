@@ -288,7 +288,7 @@ const PurchaseBox = styled.div`
   .problem {
     font-weight: 500;
     font-size: 1.2rem;
-    color: red;
+    color: #e4324c;
     padding-top: 15px;
   }
   .formProblem {
@@ -300,7 +300,7 @@ const PurchaseBox = styled.div`
 const Button = styled.input`
   font-size: 1.2rem;
   width: 100%;
-  background-color: #ebcf34;
+  background-color: #f4b95f;
   &:hover:enabled {
     cursor: pointer;
   }

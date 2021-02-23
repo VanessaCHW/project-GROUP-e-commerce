@@ -149,10 +149,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   .topLink {
-    color: black;
+    color: #62acb5;
     text-decoration: none;
     &:hover {
-      color: #cca300;
+      color: #f4b95f;
       cursor: pointer;
     }
   }
@@ -187,10 +187,10 @@ const Name = styled.div`
 `;
 const Vendor = styled.a`
   text-decoration: none;
-  color: #629d9d;
+  color: #62acb5;
   padding-top: 10px;
   &:hover {
-    color: #cca300;
+    color: #f4b95f;
     cursor: pointer;
   }
 `;
@@ -244,6 +244,9 @@ const QtyButton = styled.button`
   height: 40px;
   width: 35px;
   font-size: 1.5rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Description = styled.div`
@@ -259,12 +262,12 @@ const DescHead = styled.div`
   min-width: 140px;
 `;
 const InStock = styled.div`
-  color: #75a3a3;
+  color: #b2b356;
   font-size: 1.2rem;
   padding-left: 10px;
 `;
 const OutOfStock = styled.div`
-  color: #ff8080;
+  color: #e4324c;
   font-size: 1.2rem;
   padding-left: 10px;
 `;

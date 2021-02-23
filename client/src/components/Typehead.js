@@ -242,6 +242,10 @@ const CartWrapper = styled.div`
     text-align: center;
     margin-right: 30px;
     color: #505050;
+    &:hover {
+      cursor: pointer;
+      color: #62acb5;
+    }
   }
 `;
 

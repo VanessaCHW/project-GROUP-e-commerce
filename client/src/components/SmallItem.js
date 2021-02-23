@@ -44,12 +44,12 @@ const Wrapper = styled(Link)`
 
 const OutOfStock = styled.div`
   font-size: 0.8rem;
-  color: #ff8080;
+  color: #e4324c;
 `;
 
 const InStock = styled.div`
   font-size: 0.8rem;
-  color: #75a3a3;
+  color: #b2b356;
 `;
 const Price = styled.div`
   font-weight: 500;

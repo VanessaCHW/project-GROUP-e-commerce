@@ -98,6 +98,9 @@ const StyledLink = styled(Link)`
     font-size: 1.2em;
     margin: 0 5px;
   }
+  &:hover {
+    color: #62acb5;
+  }
 `;
 
 export default NavBar;
