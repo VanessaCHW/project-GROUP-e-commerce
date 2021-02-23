@@ -177,24 +177,24 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: center;
       width: 100%;
-      border-radius: 15px;
-      overflow: hidden;
     }
     input {
       width: 100%;
       height: 40px;
       outline: none;
       border: none;
+      border-radius: 15px 0 0 15px;
 
       &:focus {
-        border: solid #b0b0b0 2px;
         outline: none;
+        box-shadow: 0 0 5px 3px #888;
       }
     }
     .searchBtn {
       width: 12%;
       outline: none;
       border: none;
+      border-radius: 0 15px 15px 0;
     }
     ul {
       width: 100%;

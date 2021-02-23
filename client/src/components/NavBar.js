@@ -75,7 +75,7 @@ const NavBar = () => {
 
 const Wrapper = styled.div`
   border-top: 1px #828282 solid;
-  border-bottom: 1px #999999 solid;
+  border-bottom: 1px #b0b0b0 solid;
 `;
 const Nav = styled.nav`
   background-color: #dedede;

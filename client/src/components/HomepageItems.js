@@ -47,13 +47,11 @@ const HomepageItems = ({ category }) => {
 };
 
 const Wrapper = styled.div`
-  border: solid green 2px;
   display: flex;
   overflow-x: auto;
 `;
 const Product = styled(Link)`
-  border: solid red 1px;
-  border: solid red 1px;
+  border: 1px solid #e5e7e9;
   display: inline-flex;
   min-width: 250px;
   justify-content: center;

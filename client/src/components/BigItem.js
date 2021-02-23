@@ -163,7 +163,7 @@ const ImgContainer = styled.div`
   justify-content: center;
   align-items: start;
   display: flex;
-  background-color: rgb(229, 229, 229);
+  background-color: #e5e7e9;
   flex: 3;
 `;
 const Img = styled.img`
