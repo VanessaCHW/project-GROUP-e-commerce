@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import SmallCart from './SmallCart';
 
 import { ProductsContext } from './ProductsContext';
 import SmallItem from './SmallItem';
@@ -62,6 +63,7 @@ const Searched = () => {
             />
           </Pagination>
         </ItemsContainer>
+        <SmallCart />
       </Wrapper>
     );
   }
