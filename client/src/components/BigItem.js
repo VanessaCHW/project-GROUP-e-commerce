@@ -144,10 +144,11 @@ const BigItem = () => {
 };
 
 const Wrapper = styled.div`
-  height: 100vh;
+  height: calc(100vh - 142px);
   width: 100%;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
   .topLink {
     color: #62acb5;
     text-decoration: none;
@@ -170,7 +171,7 @@ const ImgContainer = styled.div`
 const Img = styled.img`
   max-height: 90vh;
   width: 100%;
-  padding: 10vh 15% 15% 15%;
+  padding: 10vh 15% 10% 15%;
   filter: brightness(90%);
 `;
 const InfoBox = styled.div`
