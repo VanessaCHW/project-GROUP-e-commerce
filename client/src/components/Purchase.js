@@ -28,19 +28,28 @@ const Purchase = () => {
   }, [storeItems]);
 
   const formVerification = () => {
-    if (form.name) {
-      if (!form.name.includes(' ')) {
-        setFormError('Please include full name');
-        return false;
-      }
-    } else {
+    if (!form.name.includes(' ')) {
       setFormError('Please include full name');
+      return false;
+    }
+    if (!form.email.includes('.') || !form.email.includes('@')) {
+      setFormError('Please include email');
+      return false;
+    }
+    if (!form.cardName.includes(' ')) {
+      setFormError('Please include cardholder full name');
       return false;
     }
     if (isNaN(parseInt(form.credit))) {
       setFormError('Please enter credit cart number');
       return false;
     }
+    if (isNaN(parseInt(form.cvv)) || form.cvv.length != 3) {
+      setFormError('Please enter cvv (must be 3 digits).');
+      return false;
+    }
+    setFormError(null);
+    return true;
   };
 
   const handleFormChange = (fieldName, value) => {

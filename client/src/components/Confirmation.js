@@ -34,7 +34,7 @@ const Confirmation = () => {
 };
 
 const Wrapper = styled.div`
-  width: 70%;
+  width: 1130px;
   margin: 20px auto 0 auto;
   padding: 1rem;
   display: flex;
