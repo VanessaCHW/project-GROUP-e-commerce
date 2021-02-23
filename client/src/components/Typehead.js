@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { SearchContext } from './SearchContext';
 
+import { AiOutlineShoppingCart as CartLogo } from 'react-icons/ai';
+
 const Typehead = () => {
   const {
     actions: { searchByKeyword, searchAll },
@@ -34,12 +36,16 @@ const Typehead = () => {
     history.push('/searched');
   };
 
+  const handleCartClick = () => {
+    history.push('/cart');
+  };
+
   // if (status === 'idle') {
   //   console.log(suggestions, 'VALUE');
   // }
   return (
     <Wrapper>
-      <Logo onClick={handleBackToHomepage}>LOGO</Logo>
+      <Logo onClick={handleBackToHomepage}>Grade</Logo>
       <div className="wrapper-helper">
         <div className="inputContainer">
           <input
@@ -148,23 +154,22 @@ const Typehead = () => {
         )}
       </div>
       <CartWrapper>
-        <CartButton to="/cart">Cart</CartButton>
+        <CartLogo className="cartLogo" onClick={handleCartClick} />
       </CartWrapper>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  border: solid 2px red;
+  background-color: #c7c7c7;
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
   /* flex-direction: column; */
-  padding: 10px 0;
+  padding: 20px 0;
   position: relative;
 
   .wrapper-helper {
-    border: solid 2px blue;
     position: relative;
     width: 50%;
 
@@ -172,16 +177,24 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: center;
       width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
     }
     input {
       width: 100%;
+      height: 40px;
+      outline: none;
+      border: none;
+
       &:focus {
-        border: solid rgb(255, 153, 0) 2px;
+        border: solid #b0b0b0 2px;
         outline: none;
       }
     }
     .searchBtn {
       width: 12%;
+      outline: none;
+      border: none;
     }
     ul {
       width: 100%;
@@ -189,14 +202,17 @@ const Wrapper = styled.div`
       margin: 0;
       padding: 0;
       position: absolute;
-      background-color: white;
+      background-color: #f5f5f5;
+      border-radius: 20px;
     }
   }
 `;
 const Logo = styled.div`
-  border: solid 2px green;
   /* align-self: flex-start;
   justify-self: flex-start; */
+  font-size: 2.5em;
+  font-family: 'Akaya Telivigala', cursive;
+  color: #505050;
 
   top: 10%;
   bottom: 10%;
@@ -220,6 +236,13 @@ const CartWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   position: relative;
+
+  .cartLogo {
+    font-size: 3em;
+    text-align: center;
+    margin-right: 30px;
+    color: #505050;
+  }
 `;
 
 const CartButton = styled(Link)`
@@ -228,7 +251,7 @@ const CartButton = styled(Link)`
   text-align: center;
   width: 50px;
   height: 30px;
-  margin-right:20px;
+  margin-right: 20px;
 `;
 
 export default Typehead;
