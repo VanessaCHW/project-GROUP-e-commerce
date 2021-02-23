@@ -23,6 +23,7 @@ const Searched = () => {
     if (searchStatus === 'idle') {
       setFilteredItems(products);
     }
+    setCurrentPage(0);
   }, [products, searchStatus]);
 
   if (searchStatus === 'loading') {
@@ -48,20 +49,22 @@ const Searched = () => {
           {/* {products.map((product) => {
             return <SmallItem item={product} />;
           })} */}
-          <Pagination>
-            <ReactPaginate
-              previousLabel={'Previous'}
-              nextLabel={'Next'}
-              pageCount={numPages}
-              onPageChange={handlePageClick}
-              containerClassName={'pagination'}
-              previousLinkClassName={'previousLink'}
-              nextLinkClassName={'nextLink'}
-              disabledClassName={'disabledLink'}
-              activeClassName={'activeLink'}
-              data={data}
-            />
-          </Pagination>
+          {numPages > 1 ? (
+            <Pagination>
+              <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                pageCount={numPages}
+                onPageChange={handlePageClick}
+                containerClassName={'pagination'}
+                previousLinkClassName={'previousLink'}
+                nextLinkClassName={'nextLink'}
+                disabledClassName={'disabledLink'}
+                activeClassName={'activeLink'}
+                data={data}
+              />
+            </Pagination>
+          ) : null}
         </ItemsContainer>
         <SmallCart />
       </Wrapper>
